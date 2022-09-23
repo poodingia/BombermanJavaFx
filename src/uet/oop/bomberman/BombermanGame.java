@@ -1,5 +1,10 @@
 package uet.oop.bomberman;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -8,19 +13,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
+import uet.oop.bomberman.entities.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Grass;
 import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BombermanGame extends Application {
-    
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 15;
-    
+
+    public static final int WIDTH = 31;
+    public static final int HEIGHT = 13;
+
     private GraphicsContext gc;
     private Canvas canvas;
     private List<Entity> entities = new ArrayList<>();
@@ -32,7 +35,7 @@ public class BombermanGame extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws FileNotFoundException {
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -57,21 +60,52 @@ public class BombermanGame extends Application {
         };
         timer.start();
 
-        createMap();
+        createMapFile();
 
         Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
     }
 
-    public void createMap() {
+    public void createMap() throws FileNotFoundException {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
                 if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
                     object = new Wall(i, j, Sprite.wall.getFxImage());
-                }
-                else {
+                } else {
                     object = new Grass(i, j, Sprite.grass.getFxImage());
+                }
+                stillObjects.add(object);
+            }
+        }
+
+
+    }
+
+    public void createMapFile() throws FileNotFoundException {
+        File mapFile = new File("res/levels/level1.txt");
+        Scanner mapReader = new Scanner(mapFile);
+        int level = mapReader.nextInt();
+        int rows = mapReader.nextInt();
+        int column = mapReader.nextInt();
+        String rowLone = mapReader.nextLine();
+        for (int i = 0; i < rows; i++) {
+            String row = mapReader.nextLine();
+            for (int j = 0; j < column; j++) {
+                Entity object;
+                switch (row.charAt(j)) {
+                    case '#': {
+                        object = new Wall(j, i, Sprite.wall.getFxImage());
+                        break;
+                    }
+                    case '*': {
+                        object = new Brick(j, i, Sprite.brick.getFxImage());
+                        break;
+                    }
+                    default: {
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        break;
+                    }
                 }
                 stillObjects.add(object);
             }
