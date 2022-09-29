@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Scanner;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Brick;
@@ -28,7 +31,6 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
-
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -50,6 +52,7 @@ public class BombermanGame extends Application {
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("Bomberman 2022.1.0");
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -64,6 +67,29 @@ public class BombermanGame extends Application {
 
         Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
+
+
+        scene.setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+            switch (code) {
+                case LEFT: {
+                    bomberman.moveLeft();
+                    break;
+                }
+                case RIGHT: {
+                    bomberman.moveRight();
+                    break;
+                }
+                case UP: {
+                    bomberman.moveUp();
+                    break;
+                }
+                case DOWN: {
+                    bomberman.moveDown();
+                    break;
+                }
+            }
+        });
     }
 
     public void createMap() throws FileNotFoundException {
