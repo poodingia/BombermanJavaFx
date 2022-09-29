@@ -1,5 +1,7 @@
 package uet.oop.bomberman;
 
+import static uet.oop.bomberman.graphics.Sprite.DEFAULT_SIZE;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Brick;
@@ -89,6 +93,26 @@ public class BombermanGame extends Application {
                     break;
                 }
             }
+            if (intersect(bomberman)) {
+                switch (code) {
+                    case LEFT: {
+                        bomberman.moveRight();
+                        break;
+                    }
+                    case RIGHT: {
+                        bomberman.moveLeft();
+                        break;
+                    }
+                    case UP: {
+                        bomberman.moveDown();
+                        break;
+                    }
+                    case DOWN: {
+                        bomberman.moveUp();
+                        break;
+                    }
+                }
+            }
         });
     }
 
@@ -140,6 +164,19 @@ public class BombermanGame extends Application {
 
     public void update() {
         entities.forEach(Entity::update);
+    }
+
+    public boolean intersect(Entity another) {
+        for(Entity entity: stillObjects) {
+            if(entity instanceof Wall || entity instanceof Brick) {
+                Shape rectangle = new Rectangle(entity.getX(), entity.getY(), DEFAULT_SIZE, DEFAULT_SIZE);
+                Shape anotherRect = new Rectangle(another.getX(), another.getY(), DEFAULT_SIZE,DEFAULT_SIZE);
+                if(rectangle.getBoundsInParent().intersects(anotherRect.getBoundsInParent())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void render() {
