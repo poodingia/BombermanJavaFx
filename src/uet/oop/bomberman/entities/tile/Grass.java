@@ -1,6 +1,7 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman.entities.tile;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.entities.Entity;
 
 public class Grass extends Entity {
 
@@ -10,6 +11,12 @@ public class Grass extends Entity {
 
     @Override
     public void update() {
+
+    }
+
+    @Override
+    public boolean collide(Entity other) {
+        return false;
 
     }
 }

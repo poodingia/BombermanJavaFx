@@ -6,17 +6,19 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Entity {
 
+    protected static final int LEFT = 0;
+    protected static final int RIGHT = 1;
+    protected static final int UP = 2;
+    protected static final int DOWN = 3;
+
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected int x;
 
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected int y;
-    protected int velocityX = 5;
-    protected int velocityY = 5;
+
     protected Image img;
-    protected int state;
-    protected int previousState;
-    protected int foot;
+    protected boolean remove = false;
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
     public Entity(int xUnit, int yUnit, Image img) {
@@ -25,20 +27,16 @@ public abstract class Entity {
         this.img = img;
     }
 
-    public int getVelocityX() {
-        return velocityX;
+    public Entity() {
+
     }
 
-    public void setVelocityX(int velocityX) {
-        this.velocityX = velocityX;
+    public boolean isRemove() {
+        return remove;
     }
 
-    public int getVelocityY() {
-        return velocityY;
-    }
-
-    public void setVelocityY(int velocityY) {
-        this.velocityY = velocityY;
+    public void setRemove(boolean remove) {
+        this.remove = remove;
     }
 
     public void render(GraphicsContext gc) {
@@ -47,40 +45,16 @@ public abstract class Entity {
 
     public abstract void update();
 
-    public void moveLeft() {
-        changeFoot();
-        this.previousState = state;
-        this.state = states.LEFT.ordinal();
-        this.x -= velocityX;
+    public abstract boolean collide(Entity other);
+
+    public boolean intersect(Entity object) {
+        if (this.x + 4 < object.getX() + 32  && this.x + 32 - 12 > object.getX()
+            && this.y + 4 < object.getY() + 32
+            && this.y + 32 - 4 > object.getY()) {
+            return true;
+        }
+        return false;
     }
-
-    public void moveRight() {
-        changeFoot();
-        this.previousState = state;
-        this.state = states.RIGHT.ordinal();
-        this.x += velocityX;
-    }
-
-    public void moveUp() {
-        changeFoot();
-        this.previousState = state;
-        this.state = states.UP.ordinal();
-        this.y -= velocityY;
-    }
-
-    public void moveDown() {
-        changeFoot();
-        this.previousState = state;
-        this.state = states.DOWN.ordinal();
-        this.y += velocityY;
-    }
-
-    public void changeFoot() {
-
-        foot = 1 - foot;
-
-    }
-
 
     public int getX() {
         return x;
@@ -98,10 +72,11 @@ public abstract class Entity {
         this.y = y;
     }
 
-    public enum states {
-        RIGHT,
-        LEFT,
-        UP,
-        DOWN
+    public Image getImg() {
+        return img;
+    }
+
+    public void setImg(Image img) {
+        this.img = img;
     }
 }

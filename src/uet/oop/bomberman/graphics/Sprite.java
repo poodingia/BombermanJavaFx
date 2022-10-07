@@ -198,7 +198,8 @@ public class Sprite {
 		_pixels = new int[SIZE * SIZE];
 		setColor(color);
 	}
-	
+
+
 	private void setColor(int color) {
 		for (int i = 0; i < _pixels.length; i++) {
 			_pixels[i] = color;
