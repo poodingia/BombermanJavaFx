@@ -3,13 +3,13 @@ package uet.oop.bomberman.entities.character;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 
 import javafx.scene.image.Image;
-import uet.oop.bomberman.entities.AnimatedEntitiy;
+import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Wall;
 
 
-public abstract class Character extends AnimatedEntitiy {
+public abstract class Character extends AnimatedEntity {
 
     protected boolean alive = true;
     protected int hitBoxSize = 32;
@@ -25,7 +25,7 @@ public abstract class Character extends AnimatedEntitiy {
 
     protected abstract void calculateMove();
 
-    public abstract void kill();
+    protected abstract void kill();
 
     protected abstract void afterKill();
 
@@ -39,29 +39,6 @@ public abstract class Character extends AnimatedEntitiy {
     public void resetVelocity() {
         this.velocityY = 0;
         this.velocityX = 0;
-    }
-
-    public boolean isCollide() {
-        int column = this.x / 32;
-        int row = this.y / 32;
-        if (row <= 0) {
-            row = 1;
-        }
-        if (column <= 0) {
-            column = 1;
-        }
-        Entity object = null;
-        for (int i = row - 1; i <= row + 1; i++) {
-            for (int j = column - 1; j <= column + 1; j++) {
-                object = mapObjects.get(i).get(j);
-                if ( object instanceof Brick || object instanceof Wall) {
-                    if (this.intersect(object)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public void moveBack() {

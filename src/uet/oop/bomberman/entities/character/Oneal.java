@@ -1,7 +1,6 @@
 package uet.oop.bomberman.entities.character;
 
 import javafx.scene.image.Image;
-import uet.oop.bomberman.entities.Entity;
 
 public class Oneal extends Character {
 
@@ -34,9 +33,4 @@ public class Oneal extends Character {
 
     }
 
-    @Override
-    public boolean collide(Entity other) {
-        return false;
-
-    }
 }

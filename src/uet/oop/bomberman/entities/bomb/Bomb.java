@@ -1,13 +1,14 @@
 package uet.oop.bomberman.entities.bomb;
 
+import java.util.ArrayList;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.entities.AnimatedEntitiy;
+import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.character.Bomber;
-import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Bomb extends AnimatedEntitiy {
-    Bomber bomber;
+public class Bomb extends AnimatedEntity {
+    private Bomber bomber;
+    private Flame flame;
 
     private int timeLeft = 240;
     public Bomb(int xUnit, int yUnit, Image img, Bomber bomber) {
@@ -21,11 +22,6 @@ public class Bomb extends AnimatedEntitiy {
         chooseSprite();
         countDown();
         animate();
-    }
-
-    @Override
-    public boolean collide(Entity other) {
-        return false;
     }
 
     public Bomber getBomber() {
@@ -44,6 +40,7 @@ public class Bomb extends AnimatedEntitiy {
     public void explode() {
         if(timeLeft <= 0) {
             img = Sprite.bomb_exploded1.getFxImage();
+
         }
     }
 

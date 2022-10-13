@@ -2,12 +2,12 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
 
-public abstract class AnimatedEntitiy extends Entity {
+public abstract class AnimatedEntity extends Entity {
 
     protected final int MAX_ANIMATE = 7500;
     protected int animate = 0;
 
-    public AnimatedEntitiy(int xUnit, int yUnit, Image img) {
+    public AnimatedEntity(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
 

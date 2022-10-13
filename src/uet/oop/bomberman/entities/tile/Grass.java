@@ -14,9 +14,4 @@ public class Grass extends Entity {
 
     }
 
-    @Override
-    public boolean collide(Entity other) {
-        return false;
-
-    }
 }

@@ -45,15 +45,10 @@ public abstract class Entity {
 
     public abstract void update();
 
-    public abstract boolean collide(Entity other);
-
     public boolean intersect(Entity object) {
-        if (this.x + 4 < object.getX() + 32  && this.x + 32 - 12 > object.getX()
+        return this.x + 4 < object.getX() + 32 && this.x + 32 - 12 > object.getX()
             && this.y + 4 < object.getY() + 32
-            && this.y + 32 - 4 > object.getY()) {
-            return true;
-        }
-        return false;
+            && this.y + 32 - 6 > object.getY();
     }
 
     public int getX() {
@@ -72,11 +67,4 @@ public abstract class Entity {
         this.y = y;
     }
 
-    public Image getImg() {
-        return img;
-    }
-
-    public void setImg(Image img) {
-        this.img = img;
-    }
 }

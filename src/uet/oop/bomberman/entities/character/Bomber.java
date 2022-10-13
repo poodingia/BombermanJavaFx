@@ -40,7 +40,7 @@ public class Bomber extends Character {
             }
             moving = velocityY != 0 || velocityX != 0;
             move();
-            if(isCollide()) {
+            if(canMove()) {
                 moveBack();
             }
         }
@@ -59,7 +59,26 @@ public class Bomber extends Character {
 
     @Override
     public boolean canMove() {
-        return true;
+        int column = this.x / 32;
+        int row = this.y / 32;
+        if (row <= 0) {
+            row = 1;
+        }
+        if (column <= 0) {
+            column = 1;
+        }
+        Entity object = null;
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = column - 1; j <= column + 1; j++) {
+                object = mapObjects.get(i).get(j);
+                if ( object instanceof Brick || object instanceof Wall) {
+                    if (this.intersect(object)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -69,12 +88,6 @@ public class Bomber extends Character {
         chooseSprite();
         animate();
         stay();
-    }
-
-    @Override
-    public boolean collide(Entity other) {
-        return this.x + hitBoxSize < other.getX() && this.x > hitBoxSize + other.getX() &&
-            this.y + hitBoxSize < other.getY() && this.y > hitBoxSize + other.getY();
     }
 
     private void chooseSprite() {
@@ -120,7 +133,7 @@ public class Bomber extends Character {
     public void placeBomb() {
         if (keyCodeList.size() >= 1) {
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
-                Bomb bomb = new Bomb(x / 32, y / 32, Sprite.bomb.getFxImage(), this);
+                Bomb bomb = new Bomb((x + 14) / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), this);
                 bombs.add(bomb);
                 keyCodeList.clear();
             }

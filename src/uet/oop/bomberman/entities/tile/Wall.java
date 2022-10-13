@@ -14,9 +14,4 @@ public class Wall extends Entity {
 
     }
 
-    @Override
-    public boolean collide(Entity other) {
-        return false;
-
-    }
 }
