@@ -68,11 +68,41 @@ public class BombermanGame extends Application {
         // Tao scene
         Scene scene = new Scene(root);
 
-        // Them scene vao stage
-        stage.setScene(scene);
+    //START MENU===========================================
+        menu.setStyle("-fx-background-image: url('start_menu.png')");
+        MenuScene = new Scene(menu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
+        stage.setScene(MenuScene);
+
+        Button start = new Button("START");
+        Button exit = new Button("EXIT");
+
+        Text title = new Text("BOMBERMAN");
+        title.setStyle("-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+        start.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        exit.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        Font font = Font.font("Verdana", FontWeight.BOLD, 30);
+        Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
+        start.setFont(font);
+        exit.setFont(font);
+        title.setFont(font1);
+
+        menu.setAlignment(Pos.TOP_LEFT);
+        menu.setSpacing(20);
+        menu.getChildren().addAll(title, start, exit);
+        start.setOnAction(event -> {
+            paused = false;
+            // Them scene vao stage
+            stage.setScene(scene);
+        });
+
+        exit.setOnAction(event -> {
+            stage.close();
+        });
+
         stage.show();
         stage.setTitle("Bomberman 2022.1.0");
-        StartMenu(stage);
+    //==========================================================
+        
         //loadMapFile(1);
         createMap();
 
@@ -111,7 +141,7 @@ public class BombermanGame extends Application {
         root.setStyle("-fx-background-color: white; -fx-text-fill: yellow;");
         menu.setStyle("-fx-background-image: url('start_menu.png')");
         // Tao scene
-        GameScene = new Scene(root, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
+        GameScene = new Scene(root);
         MenuScene = new Scene(menu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
         stage.setScene(MenuScene);
 
@@ -140,8 +170,8 @@ public class BombermanGame extends Application {
             stage.close();
         });
 
-        stage.setTitle("Bomberman");
-        stage.show();
+//        stage.setTitle("Bomberman");
+//        stage.show();
     }
 
     public void update() {
