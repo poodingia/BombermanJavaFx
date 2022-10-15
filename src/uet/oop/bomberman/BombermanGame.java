@@ -1,14 +1,11 @@
 package uet.oop.bomberman;
 
-//import static uet.oop.bomberman.level.FileLevelLoader.loadMapFile;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,9 +13,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -68,7 +62,7 @@ public class BombermanGame extends Application {
         // Tao scene
         Scene scene = new Scene(root);
 
-    //START MENU===========================================
+        //START MENU===========================================
         menu.setStyle("-fx-background-image: url('start_menu.png')");
         MenuScene = new Scene(menu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
         stage.setScene(MenuScene);
@@ -101,8 +95,8 @@ public class BombermanGame extends Application {
 
         stage.show();
         stage.setTitle("Bomberman 2022.1.0");
-    //==========================================================
-        
+        //==========================================================
+
         //loadMapFile(1);
         createMap();
 

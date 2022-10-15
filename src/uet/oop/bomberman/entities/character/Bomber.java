@@ -15,6 +15,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Character {
 
+    private int bombLeft = 5;
+
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -40,7 +42,7 @@ public class Bomber extends Character {
             }
             moving = velocityY != 0 || velocityX != 0;
             move();
-            if(canMove()) {
+            if (canMove()) {
                 moveBack();
             }
         }
@@ -71,8 +73,9 @@ public class Bomber extends Character {
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = column - 1; j <= column + 1; j++) {
                 object = mapObjects.get(i).get(j);
-                if ( object instanceof Brick || object instanceof Wall) {
+                if (object instanceof Brick || object instanceof Wall) {
                     if (this.intersect(object)) {
+                        slide(object);
                         return true;
                     }
                 }
@@ -131,12 +134,53 @@ public class Bomber extends Character {
     }
 
     public void placeBomb() {
-        if (keyCodeList.size() >= 1) {
+        if (keyCodeList.size() >= 1 && bombLeft > 0) {
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
                 Bomb bomb = new Bomb((x + 14) / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), this);
                 bombs.add(bomb);
+                bombLeft--;
                 keyCodeList.clear();
             }
+        }
+    }
+
+    public void slide(Entity obstacle) {
+        Bomber e = new Bomber(0, 0, Sprite.oneal_right1.getFxImage());
+        e.setX(this.x);
+        e.setY(this.y);
+        switch (direction) {
+            case LEFT:
+            case RIGHT:
+                for (int i = 0; i < 16; i++) {
+                    e.setY(this.y + i);
+                    if (!e.intersect(obstacle)) {
+
+                        this.setY(e.getY());
+                        return;
+                    }
+                    e.setY(this.y - i);
+                    if (!e.intersect(obstacle)) {
+
+                        this.setY(e.getY());
+                        return;
+                    }
+                }
+            case UP:
+            case DOWN:
+                for (int i = 0; i < 16; i++) {
+                    e.setX(this.x + i);
+                    if (!e.intersect(obstacle)) {
+
+                        this.setX(e.getX());
+                        return;
+                    }
+                    e.setX(this.x - i);
+                    if (!e.intersect(obstacle)) {
+
+                        this.setX(e.getX());
+                        return;
+                    }
+                }
         }
     }
 
