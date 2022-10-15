@@ -46,9 +46,9 @@ public abstract class Entity {
     public abstract void update();
 
     public boolean intersect(Entity object) {
-        return this.x + 4 < object.getX() + 32 && this.x + 32 - 12 > object.getX()
-            && this.y + 4 < object.getY() + 32
-            && this.y + 32 - 6 > object.getY();
+        return this.x < object.getX() + 32 && this.x + 32 - 8 > object.getX()
+            && this.y < object.getY() + 32
+            && this.y + 32 > object.getY();
     }
 
     public int getX() {
