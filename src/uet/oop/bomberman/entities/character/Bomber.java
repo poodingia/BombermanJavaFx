@@ -15,8 +15,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Character {
 
-    private int bombLeft = 5;
-
+    private int bombLeft = 100;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -48,6 +47,15 @@ public class Bomber extends Character {
         }
     }
 
+    public void handle() {
+        if (keyCodeList.size() > 0) {
+            if (keyCodeList.lastElement().isArrowKey()) {
+                calculateMove();
+            } else if (keyCodeList.lastElement() == KeyCode.SPACE) {
+                placeBomb();
+            }
+        }
+    }
 
     @Override
     public void kill() {
@@ -86,8 +94,7 @@ public class Bomber extends Character {
 
     @Override
     public void update() {
-        placeBomb();
-        calculateMove();
+        handle();
         chooseSprite();
         animate();
         stay();
@@ -139,7 +146,7 @@ public class Bomber extends Character {
                 Bomb bomb = new Bomb((x + 14) / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), this);
                 bombs.add(bomb);
                 bombLeft--;
-                keyCodeList.clear();
+                keyCodeList.pop();
             }
         }
     }
