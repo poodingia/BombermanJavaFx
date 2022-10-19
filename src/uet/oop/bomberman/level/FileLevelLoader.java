@@ -1,9 +1,7 @@
 package uet.oop.bomberman.level;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.tile.Brick;
-import uet.oop.bomberman.entities.tile.Grass;
-import uet.oop.bomberman.entities.tile.Wall;
+import uet.oop.bomberman.entities.tile.*;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.File;
@@ -67,6 +65,10 @@ public class FileLevelLoader {
             mapObjects.add(new ArrayList<Entity>());
             for (int x = 0; x < getWidth(); x++) {
                 Entity object;
+                FlameBuff flameB;
+                BombBuff bombB;
+                SpeedBuff speedB;
+                Portal portal;
                 int pos = x + y * getWidth();
                 char c = map[y][x];
                 switch (c) {
@@ -79,12 +81,23 @@ public class FileLevelLoader {
                         object = new Wall(x, y, Sprite.wall.getFxImage());
                         break;
                     // Thêm Portal
-//                    case 'x':
-//                        break;
+                    case 'x':
+                        object = new Portal(x, y, Sprite.portal.getFxImage());
+                        break;
                     // Thêm brick
                     case '*':
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
+                    case 'b':
+                        object = new BombBuff(x, y, Sprite.powerup_bombs.getFxImage());
+                        break;
+                    case 'f':
+                        object = new FlameBuff(x, y, Sprite.powerup_flames.getFxImage());
+                        break;
+                    case 's':
+                        object = new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage());
+                        break;
+
                     default: {
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;

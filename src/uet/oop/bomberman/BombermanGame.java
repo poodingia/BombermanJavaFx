@@ -121,7 +121,7 @@ public class BombermanGame extends Application {
     }
 
     public void createMap(){
-        levelLoader.loadLevel(1);
+        levelLoader.loadLevel(3);
         levelLoader.creatEntities();
     }
 
