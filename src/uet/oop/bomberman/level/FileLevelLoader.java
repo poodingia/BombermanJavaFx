@@ -1,6 +1,7 @@
 package uet.oop.bomberman.level;
 import static uet.oop.bomberman.BombermanGame.grasses;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
+import static uet.oop.bomberman.BombermanGame.items;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.tile.*;
 import uet.oop.bomberman.graphics.Sprite;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.concurrent.BrokenBarrierException;
 
 
 public class FileLevelLoader {
@@ -66,22 +68,21 @@ public class FileLevelLoader {
             mapObjects.add(new ArrayList<Entity>());
             for (int x = 0; x < getWidth(); x++) {
                 Entity object;
+                Brick objectBrick;
                 FlameBuff flameB;
                 BombBuff bombB;
                 SpeedBuff speedB;
                 Portal portal;
                 int pos = x + y * getWidth();
                 char c = map[y][x];
+
                 Grass grass = new Grass(x, y, Sprite.grass.getFxImage());
                 grasses.add(grass);
                 switch (c) {
-                    // Thêm grass
-                    case ' ':
-                        object = new Grass(x, y, Sprite.grass.getFxImage());
-                        break;
                     // Thêm Wall
                     case '#':
                         object = new Wall(x, y, Sprite.wall.getFxImage());
+                        mapObjects.get(y).add(object);
                         break;
                     // Thêm Portal
                     case 'x':
@@ -89,24 +90,37 @@ public class FileLevelLoader {
                         break;
                     // Thêm brick
                     case '*':
-                        object = new Brick(x, y, Sprite.brick.getFxImage());
+                        objectBrick = new Brick(x, y, Sprite.brick.getFxImage());
+                        mapObjects.get(y).add(objectBrick);
                         break;
                     case 'b':
-                        object = new BombBuff(x, y, Sprite.powerup_bombs.getFxImage());
+                        objectBrick = new Brick(x, y, Sprite.brick.getFxImage());
+                        bombB = new BombBuff(x, y, Sprite.powerup_bombs.getFxImage(), objectBrick);
+                        mapObjects.get(y).add(objectBrick);
+                        items.add(bombB);
+                        bombB.setBrick(objectBrick);
                         break;
                     case 'f':
-                        object = new FlameBuff(x, y, Sprite.powerup_flames.getFxImage());
+                        objectBrick = new Brick(x, y, Sprite.brick.getFxImage());
+                        flameB = new FlameBuff(x, y, Sprite.powerup_flames.getFxImage(), objectBrick);
+                        mapObjects.get(y).add(objectBrick);
+                        items.add(flameB);
+                        flameB.setBrick(objectBrick);
                         break;
                     case 's':
-                        object = new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage());
+                        objectBrick = new Brick(x, y, Sprite.brick.getFxImage());
+                        speedB = new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage(), objectBrick);
+                        mapObjects.get(y).add(objectBrick);
+                        items.add(speedB);
+                        speedB.setBrick(objectBrick);
                         break;
 
                     default: {
                         object = new Grass(x, y, Sprite.grass.getFxImage());
+                        mapObjects.get(y).add(object);
                         break;
                     }
                 }
-                mapObjects.get(y).add(object);
             }
         }
     }
