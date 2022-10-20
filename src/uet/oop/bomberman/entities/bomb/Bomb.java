@@ -46,11 +46,11 @@ public class Bomb extends AnimatedEntity {
         if (timeLeft == 0) {
             flame = new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, null, bomber);
             img = Sprite.bomb_exploded.getFxImage();
-        } else if (timeLeft == -240) {
+        } else if (timeLeft == -24) {
             img = Sprite.bomb_exploded1.getFxImage();
-        } else if (timeLeft == -480) {
+        } else if (timeLeft == -48) {
             img = Sprite.bomb_exploded2.getFxImage();
-        } else if (timeLeft == -600) {
+        } else if (timeLeft == -60) {
             remove = true;
             flame.remove = true;
         }
@@ -66,8 +66,12 @@ public class Bomb extends AnimatedEntity {
     @Override
     public void render(GraphicsContext gc) {
         super.render(gc);
-        if (timeLeft <= 0) {
+        if (timeLeft <= 0 && flame != null) {
             flame.render(gc);
         }
+    }
+
+    public void kill() {
+        flame.kill();
     }
 }

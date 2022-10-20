@@ -1,17 +1,24 @@
 package uet.oop.bomberman.entities.bomb;
 
+
+
+import static uet.oop.bomberman.BombermanGame.entities;
+import static uet.oop.bomberman.BombermanGame.mapObjects;
+
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.entities.AnimatedEntity;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.entities.character.Character;
+import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Flame extends Bomb {
 
 
-    List<FlameSegment> flameSegmentList = new ArrayList<>();
+    private List<FlameSegment> flameSegmentList = new ArrayList<>();
 
     public Flame(int xUnit, int yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img, bomber);
@@ -23,12 +30,12 @@ public class Flame extends Bomb {
             Sprite.explosion_vertical.getFxImage()));
         flameSegmentList.add(new FlameSegment(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE + 1,
             Sprite.explosion_vertical.getFxImage()));
-
     }
 
     @Override
     public void update() {
         explode();
+        kill();
         chooseSprite();
         animate();
     }
@@ -44,7 +51,7 @@ public class Flame extends Bomb {
     @Override
     public void chooseSprite() {
         for (int i = 0; i < flameSegmentList.size(); i++) {
-            if(timeLeft == 240) {
+            if(timeLeft == -24) {
                 switch (i) {
                     case LEFT:
                     case RIGHT:
@@ -56,7 +63,7 @@ public class Flame extends Bomb {
                         break;
                 }
             }
-            else if(timeLeft == 0) {
+            else if(timeLeft == -48) {
                 switch (i) {
                     case LEFT:
                     case RIGHT:
@@ -75,4 +82,20 @@ public class Flame extends Bomb {
         timeLeft--;
     }
 
+    @Override
+    public void kill() {
+        for(Character character: entities) {
+            for(FlameSegment flameSegment: flameSegmentList) {
+                if(character.intersect(flameSegment)) {
+                    character.kill();
+                }
+            }
+        }
+        for (FlameSegment flameSegment: flameSegmentList) {
+            Entity entity = mapObjects.get(flameSegment.getYCanvas()).get(flameSegment.getXCanvas());
+            if(entity instanceof Brick) {
+                ((Brick) entity).collapse();
+            }
+        }
+    }
 }
