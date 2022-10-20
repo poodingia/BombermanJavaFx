@@ -18,6 +18,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Flame extends Bomb {
 
 
+    private int timeLeft = 0;
     private List<FlameSegment> flameSegmentList = new ArrayList<>();
 
     public Flame(int xUnit, int yUnit, Image img, Bomber bomber) {
@@ -92,7 +93,7 @@ public class Flame extends Bomb {
             }
         }
         for (FlameSegment flameSegment: flameSegmentList) {
-            Entity entity = mapObjects.get(flameSegment.getYCanvas()).get(flameSegment.getXCanvas());
+            Entity entity = mapObjects.get(flameSegment.getY() / 32).get(flameSegment.getX() / 32);
             if(entity instanceof Brick) {
                 ((Brick) entity).collapse();
             }

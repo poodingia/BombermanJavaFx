@@ -39,16 +39,15 @@ public class BombermanGame extends Application {
     public static List<Bomb> bombs = new ArrayList<>();
 
     public static List<Grass> grasses = new ArrayList<>();
-
-     private GraphicsContext gc;
-    private Canvas canvas;
     public static List<Character> entities = new ArrayList<>();
-    private FileLevelLoader levelLoader = new FileLevelLoader();
-    private Scene GameScene;
-    private Scene MenuScene;
     VBox root = new VBox();
     VBox menu = new VBox();
     Text Stat = new Text("Level 1");
+    private GraphicsContext gc;
+    private Canvas canvas;
+    private FileLevelLoader levelLoader = new FileLevelLoader();
+    private Scene GameScene;
+    private Scene MenuScene;
     private boolean paused = true;
 
     public static void main(String[] args) {
@@ -60,7 +59,6 @@ public class BombermanGame extends Application {
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
-
         // Tao root container
         Group root = new Group();
         root.getChildren().add(canvas);
@@ -77,9 +75,12 @@ public class BombermanGame extends Application {
         Button exit = new Button("EXIT");
 
         Text title = new Text("BOMBERMAN");
-        title.setStyle("-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        start.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
-        exit.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        title.setStyle(
+            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+        start.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        exit.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
         Font font = Font.font("Verdana", FontWeight.BOLD, 30);
         Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
         start.setFont(font);
@@ -105,7 +106,6 @@ public class BombermanGame extends Application {
 
         //loadMapFile(1);
         createMap();
-
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
 
@@ -126,7 +126,7 @@ public class BombermanGame extends Application {
         timer.start();
     }
 
-    public void createMap(){
+    public void createMap() {
         levelLoader.loadLevel(1);
         levelLoader.creatEntities();
     }
@@ -134,7 +134,6 @@ public class BombermanGame extends Application {
     public void StartMenu(Stage stage) {
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
-
         root.getChildren().add(Stat);
         root.getChildren().add(canvas);
 
@@ -149,9 +148,12 @@ public class BombermanGame extends Application {
         Button exit = new Button("EXIT");
 
         Text title = new Text("BOMBERMAN");
-        title.setStyle("-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        start.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
-        exit.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        title.setStyle(
+            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+        start.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        exit.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
         Font font = Font.font("Verdana", FontWeight.BOLD, 30);
         Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
         start.setFont(font);
@@ -177,7 +179,15 @@ public class BombermanGame extends Application {
     public void update() {
         bombs.removeIf(Bomb::isRemove);
         entities.removeIf(Entity::isRemove);
-        mapObjects.forEach(row -> row.removeIf(Entity::isRemove));
+        for (ArrayList<Entity> arrayList : mapObjects) {
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (arrayList.get(i).isRemove()) {
+                    arrayList.set(i,
+                        new Grass(arrayList.get(i).getXCanvas(), arrayList.get(i).getXCanvas(),
+                            Sprite.grass.getFxImage()));
+                }
+            }
+        }
         entities.forEach(Entity::update);
         bombs.forEach(Bomb::update);
     }
@@ -185,17 +195,12 @@ public class BombermanGame extends Application {
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         grasses.forEach(g -> g.render(gc));
-        mapObjects.forEach(g -> g.forEach(e -> {
-            if(e instanceof Grass) {
-                e.render(gc);
-            }
-        }));
-        mapObjects.forEach(g -> g.forEach(e -> {
-            if(e instanceof Brick || e instanceof Wall) {
-                e.render(gc);
-            }
-        }));
         bombs.forEach(g -> g.render(gc));
+        mapObjects.forEach(g -> g.forEach(e -> {
+            if (!(e instanceof Grass)) {
+                e.render(gc);
+            }
+        }));
         entities.forEach(g -> g.render(gc));
     }
 

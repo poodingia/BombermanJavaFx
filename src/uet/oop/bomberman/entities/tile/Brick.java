@@ -34,7 +34,7 @@ public class Brick extends AnimatedEntity {
             timeLeft--;
         }
 
-        if (timeLeft < -48) {
+        if (timeLeft == -60) {
             remove = true;
         }
     }

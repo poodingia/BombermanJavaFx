@@ -75,8 +75,8 @@ public class Bomber extends Character {
 
     @Override
     public boolean canMove() {
-        int column = this.x / 32;
-        int row = this.y / 32;
+        int column = (this.x + this.x + 32) / 64;
+        int row = (this.y + this.y + 32) / 64;
         if (row <= 0) {
             row = 1;
         }
