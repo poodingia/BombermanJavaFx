@@ -42,7 +42,7 @@ public class Bomber extends Character {
             }
             moving = velocityY != 0 || velocityX != 0;
             move();
-            if (canMove()) {
+            if (!canMove()) {
                 moveBack();
             }
         }
@@ -90,12 +90,12 @@ public class Bomber extends Character {
                 if (object instanceof Brick || object instanceof Wall) {
                     if (this.intersect(object)) {
                         slide(object);
-                        return true;
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -154,8 +154,14 @@ public class Bomber extends Character {
 
     public void placeBomb() {
         if (keyCodeList.size() >= 1 && bombLeft > 0) {
+            for (Bomb bomb : bombs) {
+                if (bomb.getXCanvas() == this.getXCanvas()
+                    && bomb.getYCanvas() == this.getYCanvas()) {
+                    return;
+                }
+            }
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
-                Bomb bomb = new Bomb((x + 14) / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), this);
+                Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(), this);
                 bombs.add(bomb);
                 bombLeft--;
                 keyCodeList.pop();
