@@ -1,13 +1,7 @@
 package uet.oop.bomberman.entities.character;
 
-import static uet.oop.bomberman.BombermanGame.mapObjects;
-
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.tile.Brick;
-import uet.oop.bomberman.entities.tile.Wall;
-
 
 public abstract class Character extends AnimatedEntity {
 

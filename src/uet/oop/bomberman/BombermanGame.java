@@ -169,6 +169,9 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
+        bombs.removeIf(Bomb::isRemove);
+        entities.removeIf(Entity::isRemove);
+        mapObjects.forEach(row -> row.removeIf(Entity::isRemove));
         entities.forEach(Entity::update);
         bombs.forEach(Bomb::update);
     }
