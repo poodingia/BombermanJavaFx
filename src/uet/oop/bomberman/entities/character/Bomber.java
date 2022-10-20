@@ -16,6 +16,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Bomber extends Character {
 
     private int bombLeft = 100;
+    private int timeAfter = 100;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -59,12 +60,17 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-
+        alive = false;
     }
 
     @Override
     protected void afterKill() {
-
+        if (!alive) {
+            timeAfter--;
+        }
+        if (timeAfter <= 0) {
+            remove = true;
+        }
     }
 
     @Override
@@ -98,9 +104,15 @@ public class Bomber extends Character {
         chooseSprite();
         animate();
         stay();
+        afterKill();
     }
 
     private void chooseSprite() {
+        if (!alive) {
+            img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3,
+                animate, 40).getFxImage();
+            return;
+        }
         switch (direction) {
             case UP:
                 img = Sprite.player_up.getFxImage();

@@ -1,4 +1,5 @@
 package uet.oop.bomberman.level;
+import static uet.oop.bomberman.BombermanGame.grasses;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.tile.*;
@@ -71,6 +72,8 @@ public class FileLevelLoader {
                 Portal portal;
                 int pos = x + y * getWidth();
                 char c = map[y][x];
+                Grass grass = new Grass(x, y, Sprite.grass.getFxImage());
+                grasses.add(grass);
                 switch (c) {
                     // Thêm grass
                     case ' ':

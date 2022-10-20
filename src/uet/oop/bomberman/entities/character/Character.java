@@ -19,7 +19,7 @@ public abstract class Character extends AnimatedEntity {
 
     protected abstract void calculateMove();
 
-    protected abstract void kill();
+    public abstract void kill();
 
     protected abstract void afterKill();
 
