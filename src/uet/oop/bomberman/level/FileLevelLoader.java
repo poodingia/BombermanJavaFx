@@ -1,13 +1,16 @@
 package uet.oop.bomberman.level;
-import static uet.oop.bomberman.BombermanGame.grasses;
+import static uet.oop.bomberman.BombermanGame.ground;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
+import uet.oop.bomberman.entities.tile.FlameBuff;
 import uet.oop.bomberman.entities.tile.Grass;
+import uet.oop.bomberman.entities.tile.Portal;
+import uet.oop.bomberman.entities.tile.SpeedBuff;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.io.File;
 import java.util.List;
 
 import java.io.BufferedReader;
@@ -71,7 +74,7 @@ public class FileLevelLoader {
                 int pos = x + y * getWidth();
                 char c = map[y][x];
                 Grass grass = new Grass(x, y, Sprite.grass.getFxImage());
-                grasses.add(grass);
+                ground.add(grass);
                 switch (c) {
                     // Thêm grass
                     case ' ':
@@ -82,10 +85,24 @@ public class FileLevelLoader {
                         object = new Wall(x, y, Sprite.wall.getFxImage());
                         break;
                     // Thêm Portal
-//                    case 'x':
-//                        break;
+                    case 'x':
+                        object = new Brick(x, y, Sprite.brick.getFxImage());
+                        ground.add(new Portal(x, y, Sprite.portal.getFxImage()));
+                        break;
                     // Thêm brick
                     case '*':
+                        object = new Brick(x, y, Sprite.brick.getFxImage());
+                        break;
+                    case 'b':
+                        ground.add(new BombBuff(x, y, Sprite.powerup_bombs.getFxImage()));
+                        object = new Brick(x, y, Sprite.brick.getFxImage());
+                        break;
+                    case 'f':
+                        ground.add(new FlameBuff(x, y, Sprite.powerup_flames.getFxImage()));
+                        object = new Brick(x, y, Sprite.brick.getFxImage());
+                        break;
+                    case 's':
+                        ground.add(new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage()));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     default: {

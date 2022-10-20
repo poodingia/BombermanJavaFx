@@ -6,7 +6,7 @@ import uet.oop.bomberman.entities.AnimatedEntity;
 public abstract class Character extends AnimatedEntity {
 
     protected boolean alive = true;
-    protected int hitBoxSize = 32;
+    protected int speed = 1;
     protected boolean moving = false;
     protected int velocityX = 0;
     protected int velocityY = 0;

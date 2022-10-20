@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities.character;
 
 import static uet.oop.bomberman.BombermanGame.bombs;
+import static uet.oop.bomberman.BombermanGame.ground;
 import static uet.oop.bomberman.BombermanGame.keyCodeList;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 
@@ -8,15 +9,21 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
+import uet.oop.bomberman.entities.tile.Buff;
+import uet.oop.bomberman.entities.tile.FlameBuff;
+import uet.oop.bomberman.entities.tile.SpeedBuff;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 
 public class Bomber extends Character {
 
-    private int bombLeft = 100;
+    private int bombLeft = 1;
     private int timeAfter = 100;
+
+    private int flameLength = 2;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -29,31 +36,21 @@ public class Bomber extends Character {
             KeyCode keyCode = keyCodeList.lastElement();
             if (keyCode == KeyCode.LEFT) {
                 direction = LEFT;
-                velocityX = -1;
+                velocityX = -speed;
             } else if (keyCode == KeyCode.RIGHT) {
                 direction = RIGHT;
-                velocityX = 1;
+                velocityX = speed;
             } else if (keyCode == KeyCode.UP) {
                 direction = UP;
-                velocityY = -1;
+                velocityY = -speed;
             } else if (keyCode == KeyCode.DOWN) {
                 direction = DOWN;
-                velocityY = 1;
+                velocityY = speed;
             }
             moving = velocityY != 0 || velocityX != 0;
             move();
-            if (canMove()) {
+            if (!canMove()) {
                 moveBack();
-            }
-        }
-    }
-
-    public void handle() {
-        if (keyCodeList.size() > 0) {
-            if (keyCodeList.lastElement().isArrowKey()) {
-                calculateMove();
-            } else if (keyCodeList.lastElement() == KeyCode.SPACE) {
-                placeBomb();
             }
         }
     }
@@ -70,6 +67,7 @@ public class Bomber extends Character {
         }
         if (timeAfter <= 0) {
             remove = true;
+            System.exit(0);
         }
     }
 
@@ -90,17 +88,25 @@ public class Bomber extends Character {
                 if (object instanceof Brick || object instanceof Wall) {
                     if (this.intersect(object)) {
                         slide(object);
-                        return true;
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        for(Bomb bomb : bombs) {
+            if(this.intersect(bomb) && bomb.isHarmful()) {
+                slide(object);
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public void update() {
-        handle();
+        calculateMove();
+        placeBomb();
+        powerUp();
         chooseSprite();
         animate();
         stay();
@@ -153,11 +159,16 @@ public class Bomber extends Character {
     }
 
     public void placeBomb() {
-        if (keyCodeList.size() >= 1 && bombLeft > 0) {
+        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft) {
+            for (Bomb bomb : bombs) {
+                if (bomb.getXCanvas() == this.getXCanvas()
+                    && bomb.getYCanvas() == this.getYCanvas()) {
+                    return;
+                }
+            }
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
-                Bomb bomb = new Bomb((x + 14) / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), this);
+                Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(), this);
                 bombs.add(bomb);
-                bombLeft--;
                 keyCodeList.pop();
             }
         }
@@ -203,4 +214,24 @@ public class Bomber extends Character {
         }
     }
 
+    public void powerUp() {
+        for(Entity entity: ground) {
+            if(entity instanceof Buff && this.intersect(entity)) {
+                if(entity instanceof BombBuff) {
+                    bombLeft++;
+                }
+                else if(entity instanceof FlameBuff) {
+                    flameLength++;
+                }
+                else if(entity instanceof SpeedBuff) {
+                    speed++;
+                }
+                entity.setRemove(true);
+            }
+        }
+    }
+
+    public int getFlameLength() {
+        return flameLength;
+    }
 }

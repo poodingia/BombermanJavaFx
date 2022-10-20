@@ -8,8 +8,9 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends AnimatedEntity {
 
-    private Bomber bomber;
+    protected Bomber bomber;
     private Flame flame = null;
+    private boolean harmful = false;
 
     protected int timeLeft = 240;
 
@@ -21,6 +22,7 @@ public class Bomb extends AnimatedEntity {
 
     @Override
     public void update() {
+        isHarmful();
         chooseSprite();
         countDown();
         animate();
@@ -73,5 +75,12 @@ public class Bomb extends AnimatedEntity {
 
     public void kill() {
         flame.kill();
+    }
+
+    public boolean isHarmful() {
+        if(!bomber.intersect(this)) {
+            harmful = true;
+        }
+        return harmful;
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Stack;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -23,9 +24,7 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
-import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Grass;
-import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.FileLevelLoader;
 
@@ -38,8 +37,8 @@ public class BombermanGame extends Application {
 
     public static List<Bomb> bombs = new ArrayList<>();
 
-    public static List<Grass> grasses = new ArrayList<>();
-    public static List<Character> entities = new ArrayList<>();
+    public static List<Entity> ground = new ArrayList<>();
+    public static List<Character> characters = new ArrayList<>();
     VBox root = new VBox();
     VBox menu = new VBox();
     Text Stat = new Text("Level 1");
@@ -107,7 +106,7 @@ public class BombermanGame extends Application {
         //loadMapFile(1);
         createMap();
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        entities.add(bomberman);
+        characters.add(bomberman);
 
         scene.setOnKeyPressed(event -> {
             keyCodeList.add(event.getCode());
@@ -178,7 +177,9 @@ public class BombermanGame extends Application {
 
     public void update() {
         bombs.removeIf(Bomb::isRemove);
-        entities.removeIf(Entity::isRemove);
+        characters.removeIf(Entity::isRemove);
+        ground.forEach(Entity::update);
+        ground.removeIf(Entity::isRemove);
         for (ArrayList<Entity> arrayList : mapObjects) {
             for (int i = 0; i < arrayList.size(); i++) {
                 if (arrayList.get(i).isRemove()) {
@@ -188,20 +189,22 @@ public class BombermanGame extends Application {
                 }
             }
         }
-        entities.forEach(Entity::update);
+        mapObjects.forEach(a -> a.forEach(Entity::update));
+        characters.forEach(Entity::update);
         bombs.forEach(Bomb::update);
+
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        grasses.forEach(g -> g.render(gc));
+        ground.forEach(g -> g.render(gc));
         bombs.forEach(g -> g.render(gc));
         mapObjects.forEach(g -> g.forEach(e -> {
             if (!(e instanceof Grass)) {
                 e.render(gc);
             }
         }));
-        entities.forEach(g -> g.render(gc));
+        characters.forEach(g -> g.render(gc));
     }
 
 }
