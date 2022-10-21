@@ -1,12 +1,13 @@
 package uet.oop.bomberman.entities.tile;
 
+import static uet.oop.bomberman.BombermanGame.ground;
+
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.graphics.Sprite;
 
 public class SpeedBuff extends Entity implements Buff {
-
-public class SpeedBuff extends Entity {
 
     public SpeedBuff(int x, int y, Image img) {
         super(x, y, img);
@@ -14,6 +15,8 @@ public class SpeedBuff extends Entity {
 
     @Override
     public void update() {
-
+        if(isRemove()) {
+            ground.add(new Grass(getXCanvas(), getYCanvas(), Sprite.grass.getFxImage()));
+        }
     }
 }
