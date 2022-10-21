@@ -6,6 +6,8 @@ import uet.oop.bomberman.entities.character.Bomber;
 
 public class SpeedBuff extends Entity implements Buff {
 
+public class SpeedBuff extends Entity {
+
     public SpeedBuff(int x, int y, Image img) {
         super(x, y, img);
     }
