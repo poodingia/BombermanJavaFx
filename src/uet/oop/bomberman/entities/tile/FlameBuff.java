@@ -15,8 +15,6 @@ public class FlameBuff extends Entity implements Buff {
 
     @Override
     public void update() {
-        if(isRemove()) {
-            ground.add(new Grass(getXCanvas(), getYCanvas(), Sprite.grass.getFxImage()));
-        }
+
     }
 }
