@@ -7,6 +7,8 @@ import java.util.Stack;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,6 +16,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -39,15 +45,18 @@ public class BombermanGame extends Application {
 
     public static List<Entity> ground = new ArrayList<>();
     public static List<Character> characters = new ArrayList<>();
-    VBox root = new VBox();
-    VBox menu = new VBox();
-    Text Stat = new Text("Level 1");
     private GraphicsContext gc;
     private Canvas canvas;
     private FileLevelLoader levelLoader = new FileLevelLoader();
     private Scene GameScene;
     private Scene MenuScene;
+    private Scene pausedMenuScene;
+    VBox root = new VBox();
+    VBox menu = new VBox();
+    VBox pausedMenu = new VBox();
+    Text Stat = new Text("Level 1");
     private boolean paused = true;
+
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -55,52 +64,8 @@ public class BombermanGame extends Application {
 
     @Override
     public void start(Stage stage) throws FileNotFoundException {
-        // Tao Canvas
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-        gc = canvas.getGraphicsContext2D();
-        // Tao root container
-        Group root = new Group();
-        root.getChildren().add(canvas);
-
-        // Tao scene
-        Scene scene = new Scene(root);
-
-        //START MENU===========================================
-        menu.setStyle("-fx-background-image: url('start_menu.png')");
-        MenuScene = new Scene(menu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
-        stage.setScene(MenuScene);
-
-        Button start = new Button("START");
-        Button exit = new Button("EXIT");
-
-        Text title = new Text("BOMBERMAN");
-        title.setStyle(
-            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        start.setStyle(
-            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
-        exit.setStyle(
-            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
-        Font font = Font.font("Verdana", FontWeight.BOLD, 30);
-        Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
-        start.setFont(font);
-        exit.setFont(font);
-        title.setFont(font1);
-
-        menu.setAlignment(Pos.TOP_LEFT);
-        menu.setSpacing(20);
-        menu.getChildren().addAll(title, start, exit);
-        start.setOnAction(event -> {
-            paused = false;
-            // Them scene vao stage
-            stage.setScene(scene);
-        });
-
-        exit.setOnAction(event -> {
-            stage.close();
-        });
-
-        stage.show();
-        stage.setTitle("Bomberman 2022.1.0");
+        StartMenu(stage);
+        pauseMenu(stage);
         //==========================================================
 
         //loadMapFile(1);
@@ -108,16 +73,17 @@ public class BombermanGame extends Application {
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         characters.add(bomberman);
 
-        scene.setOnKeyPressed(event -> {
+        GameScene.setOnKeyPressed(event -> {
             keyCodeList.add(event.getCode());
         });
-        scene.setOnKeyReleased(event -> {
+        GameScene.setOnKeyReleased(event -> {
             keyCodeList.clear();
         });
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
+                handlePause(stage);
                 render();
                 update();
             }
@@ -133,6 +99,7 @@ public class BombermanGame extends Application {
     public void StartMenu(Stage stage) {
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
+
         root.getChildren().add(Stat);
         root.getChildren().add(canvas);
 
@@ -147,12 +114,9 @@ public class BombermanGame extends Application {
         Button exit = new Button("EXIT");
 
         Text title = new Text("BOMBERMAN");
-        title.setStyle(
-            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        start.setStyle(
-            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
-        exit.setStyle(
-            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        title.setStyle("-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+        start.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        exit.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
         Font font = Font.font("Verdana", FontWeight.BOLD, 30);
         Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
         start.setFont(font);
@@ -173,6 +137,60 @@ public class BombermanGame extends Application {
 
         stage.setTitle("Bomberman");
         stage.show();
+    }
+
+    public void pauseMenu(Stage stage) {
+        Button quit = new Button("QUIT");
+        Button resume = new Button("CONTINUE");
+        pausedMenuScene = new Scene(pausedMenu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
+
+        pausedMenu.getChildren().addAll(resume, quit);
+
+        pausedMenu.setAlignment(Pos.CENTER);
+        pausedMenu.setSpacing(20);
+        pausedMenu.setBackground(new Background(new BackgroundFill(Color.rgb(241,222,68), CornerRadii.EMPTY, Insets.EMPTY)));
+        //pausedMenu.setStyle("-fx-background-image: url('start_menu.png')");
+        quit.setStyle("-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
+        resume.setStyle("-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
+        quit.setPadding(new Insets(20, 109, 20, 109));
+        resume.setPadding(new Insets(20, 80, 20, 80));
+        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
+        resume.setFont(font);
+        quit.setFont(font);
+
+        resume.setOnAction(event -> {
+            paused = false;
+            GameSceneTrans(stage);
+        });
+
+        quit.setOnAction(event -> {
+            stage.close();
+        });
+    }
+
+    public void handlePause(Stage stage) {
+        EventHandler<KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent e) {
+                switch (e.getCode()) {
+                    case ESCAPE:
+                        if (!paused) {
+                            paused = true;
+                            PausedSceneTrans(stage);
+                        }
+                    default:
+                        break;
+                }
+            }
+        };
+        GameScene.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
+    }
+    public void PausedSceneTrans(Stage stage) {
+        stage.setScene(pausedMenuScene);
+    }
+
+    public void GameSceneTrans(Stage stage) {
+        stage.setScene(GameScene);
     }
 
     public void update() {
