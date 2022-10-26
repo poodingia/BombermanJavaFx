@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Stack;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,7 +28,9 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
+import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Grass;
+import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.FileLevelLoader;
 
@@ -45,16 +45,16 @@ public class BombermanGame extends Application {
 
     public static List<Entity> ground = new ArrayList<>();
     public static List<Character> characters = new ArrayList<>();
+    VBox root = new VBox();
+    VBox menu = new VBox();
+    VBox pausedMenu = new VBox();
+    Text Stat = new Text("Level 1");
     private GraphicsContext gc;
     private Canvas canvas;
     private FileLevelLoader levelLoader = new FileLevelLoader();
     private Scene GameScene;
     private Scene MenuScene;
     private Scene pausedMenuScene;
-    VBox root = new VBox();
-    VBox menu = new VBox();
-    VBox pausedMenu = new VBox();
-    Text Stat = new Text("Level 1");
     private boolean paused = true;
 
 
@@ -92,7 +92,7 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        levelLoader.loadLevel(1);
+        levelLoader.loadLevel(2);
         levelLoader.creatEntities();
     }
 
@@ -114,9 +114,12 @@ public class BombermanGame extends Application {
         Button exit = new Button("EXIT");
 
         Text title = new Text("BOMBERMAN");
-        title.setStyle("-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        start.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
-        exit.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        title.setStyle(
+            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+        start.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        exit.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
         Font font = Font.font("Verdana", FontWeight.BOLD, 30);
         Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
         start.setFont(font);
@@ -148,10 +151,12 @@ public class BombermanGame extends Application {
 
         pausedMenu.setAlignment(Pos.CENTER);
         pausedMenu.setSpacing(20);
-        pausedMenu.setBackground(new Background(new BackgroundFill(Color.rgb(241,222,68), CornerRadii.EMPTY, Insets.EMPTY)));
+        pausedMenu.setBackground(new Background(
+            new BackgroundFill(Color.rgb(241, 222, 68), CornerRadii.EMPTY, Insets.EMPTY)));
         //pausedMenu.setStyle("-fx-background-image: url('start_menu.png')");
         quit.setStyle("-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
-        resume.setStyle("-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
+        resume.setStyle(
+            "-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
         quit.setPadding(new Insets(20, 109, 20, 109));
         resume.setPadding(new Insets(20, 80, 20, 80));
         Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
@@ -185,6 +190,7 @@ public class BombermanGame extends Application {
         };
         GameScene.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
     }
+
     public void PausedSceneTrans(Stage stage) {
         stage.setScene(pausedMenuScene);
     }
@@ -198,12 +204,19 @@ public class BombermanGame extends Application {
         characters.removeIf(Entity::isRemove);
         ground.forEach(Entity::update);
         ground.removeIf(Entity::isRemove);
-        for (ArrayList<Entity> arrayList : mapObjects) {
-            for (int i = 0; i < arrayList.size(); i++) {
-                if (arrayList.get(i).isRemove()) {
-                    arrayList.set(i,
-                        new Grass(arrayList.get(i).getXCanvas(), arrayList.get(i).getXCanvas(),
-                            Sprite.grass.getFxImage()));
+//        for (ArrayList<Entity> arrayList : mapObjects) {
+//            for (int i = 0; i < arrayList.size(); i++) {
+//                if (arrayList.get(i).isRemove()) {
+//                    arrayList.set(i,
+//                        new Grass(arrayList.get(i).getXCanvas(), arrayList.get(i).getXCanvas(),
+//                            Sprite.grass.getFxImage()));
+//                }
+//            }
+//        }
+        for (int i = 1; i < mapObjects.size() - 1; i++) {
+            for (int j = 1; j < mapObjects.get(i).size() - 1; j++) {
+                if (mapObjects.get(i).get(j).isRemove()) {
+                    mapObjects.get(i).set(j, new Grass(j, i, Sprite.grass.getFxImage()));
                 }
             }
         }
@@ -224,5 +237,4 @@ public class BombermanGame extends Application {
         }));
         characters.forEach(g -> g.render(gc));
     }
-
 }

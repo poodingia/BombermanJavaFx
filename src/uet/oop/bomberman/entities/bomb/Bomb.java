@@ -1,9 +1,16 @@
 package uet.oop.bomberman.entities.bomb;
 
+import static uet.oop.bomberman.BombermanGame.mapObjects;
+
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.entities.tile.Brick;
+import uet.oop.bomberman.entities.tile.Grass;
+import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends AnimatedEntity {
@@ -17,6 +24,7 @@ public class Bomb extends AnimatedEntity {
     public Bomb(int xUnit, int yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img);
         this.bomber = bomber;
+        printMap();
     }
 
 
@@ -83,4 +91,23 @@ public class Bomb extends AnimatedEntity {
         }
         return harmful;
     }
+
+    public void printMap() {
+        for (ArrayList<Entity> arrayList : mapObjects) {
+            for (Entity entity: arrayList) {
+                if(entity instanceof Brick) {
+                    System.out.print('x');
+                }
+                else if(entity instanceof Wall) {
+                    System.out.print('#');
+                }
+                else if(entity instanceof Grass) {
+                    System.out.print(' ');
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 }

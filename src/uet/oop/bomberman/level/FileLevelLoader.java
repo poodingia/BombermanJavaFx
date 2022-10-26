@@ -1,7 +1,10 @@
 package uet.oop.bomberman.level;
+import static uet.oop.bomberman.BombermanGame.characters;
 import static uet.oop.bomberman.BombermanGame.ground;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.character.Balloom;
+import uet.oop.bomberman.entities.character.Oneal;
 import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.FlameBuff;
@@ -105,11 +108,20 @@ public class FileLevelLoader {
                         ground.add(new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage()));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
+                    case '1':
+                        characters.add(new Balloom(x, y, Sprite.balloom_left1.getFxImage()));
+                        object = new Grass(x, y, Sprite.grass.getFxImage());
+                        break;
+                    case '2':
+                        characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
+                        object = new Grass(x, y, Sprite.grass.getFxImage());
+                        break;
                     default: {
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
                     }
                 }
+
                 mapObjects.get(y).add(object);
             }
         }
