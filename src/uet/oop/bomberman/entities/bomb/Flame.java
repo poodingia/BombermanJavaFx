@@ -85,8 +85,8 @@ public class Flame extends Bomb {
             }
         }
         for (FlameSegment flameSegment : flameSegmentList) {
-            Entity entity = mapObjects.get(flameSegment.getY() / 32)
-                .get(flameSegment.getX() / 32);
+            Entity entity = mapObjects.get((int)flameSegment.getY() / 32)
+                .get((int)flameSegment.getX() / 32);
             if (entity instanceof Brick) {
                 ((Brick) entity).collapse();
             }
@@ -97,48 +97,48 @@ public class Flame extends Bomb {
         for (int i = 1; i < bomber.getFlameLength(); i++) {
             if (!(mapObjects.get(getYCanvas()).get(getXCanvas() - i) instanceof Grass)) {
                 flameSegmentList.add(
-                    new FlameSegment(x / Sprite.SCALED_SIZE - i, y / Sprite.SCALED_SIZE,
+                    new FlameSegment((int)x / Sprite.SCALED_SIZE - i, (int)y / Sprite.SCALED_SIZE,
                         Sprite.explosion_horizontal.getFxImage(), LEFT));
                 break;
             }
             flameSegmentList.add(
-                new FlameSegment(x / Sprite.SCALED_SIZE - i, y / Sprite.SCALED_SIZE,
+                new FlameSegment((int)x / Sprite.SCALED_SIZE - i, (int)y / Sprite.SCALED_SIZE,
                     Sprite.explosion_horizontal.getFxImage(), LEFT));
         }
 
         for (int i = 1; i < bomber.getFlameLength(); i++) {
             if (!(mapObjects.get(getYCanvas()).get(getXCanvas() + i) instanceof Grass)) {
                 flameSegmentList.add(
-                    new FlameSegment(x / Sprite.SCALED_SIZE + i, y / Sprite.SCALED_SIZE,
+                    new FlameSegment((int)x / Sprite.SCALED_SIZE + i, (int)y / Sprite.SCALED_SIZE,
                         Sprite.explosion_horizontal.getFxImage(), RIGHT));
                 break;
             }
             flameSegmentList.add(
-                new FlameSegment(x / Sprite.SCALED_SIZE + i, y / Sprite.SCALED_SIZE,
+                new FlameSegment((int)x / Sprite.SCALED_SIZE + i, (int)y / Sprite.SCALED_SIZE,
                     Sprite.explosion_horizontal.getFxImage(), RIGHT));
         }
 
         for (int i = 1; i < bomber.getFlameLength(); i++) {
             if (!(mapObjects.get(getYCanvas() - i).get(getXCanvas()) instanceof Grass)) {
                 flameSegmentList.add(
-                    new FlameSegment(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE - i,
+                    new FlameSegment((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE - i,
                         Sprite.explosion_vertical.getFxImage(), UP));
                 break;
             }
             flameSegmentList.add(
-                new FlameSegment(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE - i,
+                new FlameSegment((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE - i,
                     Sprite.explosion_vertical.getFxImage(), UP));
         }
 
         for (int i = 1; i < bomber.getFlameLength(); i++) {
             if (!(mapObjects.get(getYCanvas() + i).get(getXCanvas()) instanceof Grass)) {
                 flameSegmentList.add(
-                    new FlameSegment(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE + i,
+                    new FlameSegment((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE + i,
                         Sprite.explosion_vertical.getFxImage(), DOWN));
                 break;
             }
             flameSegmentList.add(
-                new FlameSegment(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE + i,
+                new FlameSegment((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE + i,
                     Sprite.explosion_vertical.getFxImage(), DOWN));
         }
     }

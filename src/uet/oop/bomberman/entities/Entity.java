@@ -12,10 +12,10 @@ public abstract class Entity {
     protected static final int DOWN = 3;
 
     //Tọa độ X tính từ góc trái trên trong Canvas
-    protected int x;
+    protected double x;
 
     //Tọa độ Y tính từ góc trái trên trong Canvas
-    protected int y;
+    protected double y;
 
     protected int xCanvas;
     protected int yCanvas;
@@ -49,12 +49,12 @@ public abstract class Entity {
     public abstract void update();
 
     public boolean intersect(Entity object) {
-        return this.x < object.getX() + 32 && this.x + 32 - 8 > object.getX()
+        return this.x < object.getX() + 32 && this.x + 32 > object.getX()
             && this.y < object.getY() + 32
             && this.y + 32 > object.getY();
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
@@ -62,7 +62,7 @@ public abstract class Entity {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
@@ -75,9 +75,9 @@ public abstract class Entity {
     }
 
     public int getXCanvas() {
-        return (x + x + 32) / (Sprite.SCALED_SIZE * 2);
+        return (int)(x + x + 32) / (Sprite.SCALED_SIZE * 2);
     }
     public int getYCanvas() {
-        return (y + y + 32) / (Sprite.SCALED_SIZE * 2);
+        return (int)(y + y + 32) / (Sprite.SCALED_SIZE * 2);
     }
 }
