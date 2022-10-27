@@ -92,8 +92,8 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        levelLoader.loadLevel(2);
-        levelLoader.creatEntities();
+        levelLoader.loadLevel(1);
+        levelLoader.createEntities();
     }
 
     public void StartMenu(Stage stage) {
@@ -236,5 +236,14 @@ public class BombermanGame extends Application {
             }
         }));
         characters.forEach(g -> g.render(gc));
+    }
+
+    public static Bomb getBomb(int row, int column) {
+        for (Bomb b : bombs) {
+            if (b.getXCanvas() == row && b.getYCanvas() == column) {
+                return b;
+            }
+        }
+        return null;
     }
 }

@@ -54,7 +54,7 @@ public class Bomb extends AnimatedEntity {
 
     public void explode() {
         if (timeLeft == 0) {
-            flame = new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, null, bomber);
+            flame = new Flame((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE, null, bomber);
             img = Sprite.bomb_exploded.getFxImage();
         } else if (timeLeft == -24) {
             img = Sprite.bomb_exploded1.getFxImage();

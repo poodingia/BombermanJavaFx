@@ -3,8 +3,8 @@ import static uet.oop.bomberman.BombermanGame.characters;
 import static uet.oop.bomberman.BombermanGame.ground;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.character.Balloom;
-import uet.oop.bomberman.entities.character.Oneal;
+import uet.oop.bomberman.entities.character.enemy.Balloom;
+import uet.oop.bomberman.entities.character.enemy.Oneal;
 import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.FlameBuff;
@@ -69,7 +69,7 @@ public class FileLevelLoader {
         }
     }
 
-    public void creatEntities() {
+    public void createEntities() {
         for (int y = 0; y < getHeight(); y++) {
             mapObjects.add(new ArrayList<Entity>());
             for (int x = 0; x < getWidth(); x++) {
@@ -109,11 +109,11 @@ public class FileLevelLoader {
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     case '1':
-                        characters.add(new Balloom(x, y, Sprite.balloom_left1.getFxImage()));
+                        characters.add(new Balloom(x, y));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
                     case '2':
-                        characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
+                        characters.add(new Oneal(x, y));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
                     default: {

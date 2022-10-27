@@ -36,16 +36,16 @@ public class Bomber extends Character {
             KeyCode keyCode = keyCodeList.lastElement();
             if (keyCode == KeyCode.LEFT) {
                 direction = LEFT;
-                velocityX = -speed;
+                velocityX = -(int)speed;
             } else if (keyCode == KeyCode.RIGHT) {
                 direction = RIGHT;
-                velocityX = speed;
+                velocityX = (int)speed;
             } else if (keyCode == KeyCode.UP) {
                 direction = UP;
-                velocityY = -speed;
+                velocityY = -(int)speed;
             } else if (keyCode == KeyCode.DOWN) {
                 direction = DOWN;
-                velocityY = speed;
+                velocityY = (int)speed;
             }
             moving = velocityY != 0 || velocityX != 0;
             move();
@@ -73,8 +73,8 @@ public class Bomber extends Character {
 
     @Override
     public boolean canMove() {
-        int column = (this.x + this.x + 32) / 64;
-        int row = (this.y + this.y + 32) / 64;
+        int column = getXCanvas();
+        int row = getYCanvas();
         if (row <= 0) {
             row = 1;
         }
@@ -176,38 +176,38 @@ public class Bomber extends Character {
 
     public void slide(Entity obstacle) {
         Bomber e = new Bomber(0, 0, Sprite.oneal_right1.getFxImage());
-        e.setX(this.x);
-        e.setY(this.y);
+        e.setX((int)this.x);
+        e.setY((int)this.y);
         switch (direction) {
             case LEFT:
             case RIGHT:
                 for (int i = 0; i < 16; i++) {
-                    e.setY(this.y + i);
+                    e.setY((int)this.y + i);
                     if (!e.intersect(obstacle)) {
 
-                        this.setY(e.getY());
+                        this.setY((int)e.getY());
                         return;
                     }
-                    e.setY(this.y - i);
+                    e.setY((int)this.y - i);
                     if (!e.intersect(obstacle)) {
 
-                        this.setY(e.getY());
+                        this.setY((int)e.getY());
                         return;
                     }
                 }
             case UP:
             case DOWN:
                 for (int i = 0; i < 16; i++) {
-                    e.setX(this.x + i);
+                    e.setX((int)this.x + i);
                     if (!e.intersect(obstacle)) {
 
-                        this.setX(e.getX());
+                        this.setX((int)e.getX());
                         return;
                     }
-                    e.setX(this.x - i);
+                    e.setX((int)this.x - i);
                     if (!e.intersect(obstacle)) {
 
-                        this.setX(e.getX());
+                        this.setX((int)e.getX());
                         return;
                     }
                 }
@@ -233,5 +233,12 @@ public class Bomber extends Character {
 
     public int getFlameLength() {
         return flameLength;
+    }
+
+    @Override
+    public boolean intersect(Entity object) {
+        return this.x < object.getX() + 32 && this.x + 32 - 8 > object.getX()
+                && this.y < object.getY() + 32
+                && this.y + 32 > object.getY();
     }
 }
