@@ -4,9 +4,11 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
 
 public class FlameSegment extends AnimatedEntity {
+    private int direction;
 
-    public FlameSegment(int xUnit, int yUnit, Image img) {
+    public FlameSegment(int xUnit, int yUnit, Image img, int direction) {
         super(xUnit, yUnit, img);
+        this.direction = direction;
     }
 
     @Override
@@ -14,4 +16,7 @@ public class FlameSegment extends AnimatedEntity {
 
     }
 
+    public int getDirection() {
+        return direction;
+    }
 }

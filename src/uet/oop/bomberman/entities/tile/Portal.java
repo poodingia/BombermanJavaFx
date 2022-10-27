@@ -5,13 +5,11 @@ import uet.oop.bomberman.entities.Entity;
 
 public class Portal extends Entity {
 
-    public Portal(int x, int y, Image img) {
-        super(x, y, img);
+    public Portal(int xUnit, int yUnit, Image img) {
+        super(xUnit, yUnit, img);
     }
-
     @Override
     public void update() {
 
     }
-
 }

@@ -75,9 +75,9 @@ public abstract class Entity {
     }
 
     public int getXCanvas() {
-        return x / Sprite.SCALED_SIZE;
+        return (x + x + 32) / (Sprite.SCALED_SIZE * 2);
     }
     public int getYCanvas() {
-        return y / Sprite.SCALED_SIZE;
+        return (y + y + 32) / (Sprite.SCALED_SIZE * 2);
     }
 }

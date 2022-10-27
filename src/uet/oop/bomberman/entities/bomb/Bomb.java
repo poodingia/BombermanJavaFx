@@ -1,26 +1,36 @@
 package uet.oop.bomberman.entities.bomb;
 
+import static uet.oop.bomberman.BombermanGame.mapObjects;
+
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.entities.tile.Brick;
+import uet.oop.bomberman.entities.tile.Grass;
+import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends AnimatedEntity {
 
-    private Bomber bomber;
+    protected Bomber bomber;
     private Flame flame = null;
+    private boolean harmful = false;
 
     protected int timeLeft = 240;
 
     public Bomb(int xUnit, int yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img);
         this.bomber = bomber;
+        printMap();
     }
 
 
     @Override
     public void update() {
+        isHarmful();
         chooseSprite();
         countDown();
         animate();
@@ -74,4 +84,30 @@ public class Bomb extends AnimatedEntity {
     public void kill() {
         flame.kill();
     }
+
+    public boolean isHarmful() {
+        if(!bomber.intersect(this)) {
+            harmful = true;
+        }
+        return harmful;
+    }
+
+    public void printMap() {
+        for (ArrayList<Entity> arrayList : mapObjects) {
+            for (Entity entity: arrayList) {
+                if(entity instanceof Brick) {
+                    System.out.print('x');
+                }
+                else if(entity instanceof Wall) {
+                    System.out.print('#');
+                }
+                else if(entity instanceof Grass) {
+                    System.out.print(' ');
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 }

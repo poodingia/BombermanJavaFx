@@ -9,7 +9,6 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -44,20 +43,20 @@ public class BombermanGame extends Application {
 
     public static List<Bomb> bombs = new ArrayList<>();
 
-    public static List<Grass> grasses = new ArrayList<>();
-    public static List<Entity> items = new ArrayList<>();
-     private GraphicsContext gc;
-    private Canvas canvas;
-    public static List<Character> entities = new ArrayList<>();
-    private FileLevelLoader levelLoader = new FileLevelLoader();
-    private Scene GameScene;
-    private Scene MenuScene;
-    private Scene pausedMenuScene;
+    public static List<Entity> ground = new ArrayList<>();
+    public static List<Character> characters = new ArrayList<>();
     VBox root = new VBox();
     VBox menu = new VBox();
     VBox pausedMenu = new VBox();
     Text Stat = new Text("Level 1");
+    private GraphicsContext gc;
+    private Canvas canvas;
+    private FileLevelLoader levelLoader = new FileLevelLoader();
+    private Scene GameScene;
+    private Scene MenuScene;
+    private Scene pausedMenuScene;
     private boolean paused = true;
+
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -67,10 +66,12 @@ public class BombermanGame extends Application {
     public void start(Stage stage) throws FileNotFoundException {
         StartMenu(stage);
         pauseMenu(stage);
-        createMap();
+        //==========================================================
 
+        //loadMapFile(1);
+        createMap();
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        entities.add(bomberman);
+        characters.add(bomberman);
 
         GameScene.setOnKeyPressed(event -> {
             keyCodeList.add(event.getCode());
@@ -90,8 +91,8 @@ public class BombermanGame extends Application {
         timer.start();
     }
 
-    public void createMap(){
-        levelLoader.loadLevel(3);
+    public void createMap() {
+        levelLoader.loadLevel(2);
         levelLoader.creatEntities();
     }
 
@@ -113,9 +114,12 @@ public class BombermanGame extends Application {
         Button exit = new Button("EXIT");
 
         Text title = new Text("BOMBERMAN");
-        title.setStyle("-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        start.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
-        exit.setStyle("-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        title.setStyle(
+            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+        start.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
+        exit.setStyle(
+            "-fx-font: 40px Algerian; -fx-background-color: #0d4056; -fx-text-fill: #00ffd0; -fx-base: #b6e7c9;");
         Font font = Font.font("Verdana", FontWeight.BOLD, 30);
         Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
         start.setFont(font);
@@ -147,10 +151,12 @@ public class BombermanGame extends Application {
 
         pausedMenu.setAlignment(Pos.CENTER);
         pausedMenu.setSpacing(20);
-        pausedMenu.setBackground(new Background(new BackgroundFill(Color.rgb(241,222,68), CornerRadii.EMPTY, Insets.EMPTY)));
+        pausedMenu.setBackground(new Background(
+            new BackgroundFill(Color.rgb(241, 222, 68), CornerRadii.EMPTY, Insets.EMPTY)));
         //pausedMenu.setStyle("-fx-background-image: url('start_menu.png')");
         quit.setStyle("-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
-        resume.setStyle("-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
+        resume.setStyle(
+            "-fx-background-color: #e7e0b6; -fx-text-fill: #0d4056; -fx-base: #b6e7c9;");
         quit.setPadding(new Insets(20, 109, 20, 109));
         resume.setPadding(new Insets(20, 80, 20, 80));
         Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
@@ -184,6 +190,7 @@ public class BombermanGame extends Application {
         };
         GameScene.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
     }
+
     public void PausedSceneTrans(Stage stage) {
         stage.setScene(pausedMenuScene);
     }
@@ -194,28 +201,40 @@ public class BombermanGame extends Application {
 
     public void update() {
         bombs.removeIf(Bomb::isRemove);
-        entities.removeIf(Entity::isRemove);
-        mapObjects.forEach(row -> row.removeIf(Entity::isRemove));
-        entities.forEach(Entity::update);
+        characters.removeIf(Entity::isRemove);
+        ground.forEach(Entity::update);
+        ground.removeIf(Entity::isRemove);
+//        for (ArrayList<Entity> arrayList : mapObjects) {
+//            for (int i = 0; i < arrayList.size(); i++) {
+//                if (arrayList.get(i).isRemove()) {
+//                    arrayList.set(i,
+//                        new Grass(arrayList.get(i).getXCanvas(), arrayList.get(i).getXCanvas(),
+//                            Sprite.grass.getFxImage()));
+//                }
+//            }
+//        }
+        for (int i = 1; i < mapObjects.size() - 1; i++) {
+            for (int j = 1; j < mapObjects.get(i).size() - 1; j++) {
+                if (mapObjects.get(i).get(j).isRemove()) {
+                    mapObjects.get(i).set(j, new Grass(j, i, Sprite.grass.getFxImage()));
+                }
+            }
+        }
+        mapObjects.forEach(a -> a.forEach(Entity::update));
+        characters.forEach(Entity::update);
         bombs.forEach(Bomb::update);
+
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        grasses.forEach(g -> g.render(gc));
-        mapObjects.forEach(g -> g.forEach(e -> {
-            if(e instanceof Grass) {
-                e.render(gc);
-            }
-        }));
-        mapObjects.forEach(g -> g.forEach(e -> {
-            if(e instanceof Brick || e instanceof Wall) {
-                e.render(gc);
-            }
-        }));
+        ground.forEach(g -> g.render(gc));
         bombs.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
-        items.forEach(g -> g.render(gc));
+        mapObjects.forEach(g -> g.forEach(e -> {
+            if (!(e instanceof Grass)) {
+                e.render(gc);
+            }
+        }));
+        characters.forEach(g -> g.render(gc));
     }
-
 }
