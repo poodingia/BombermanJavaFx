@@ -246,4 +246,14 @@ public class BombermanGame extends Application {
         }
         return null;
     }
+
+//    public static Character getCharacterExcluding(int row, int column, Character main) {
+//        for (Character c :characters) {
+//            if (c == main) continue;
+//            if (c.intersect(main)) {
+//                return c;
+//            }
+//        }
+//        return null;
+//    }
 }

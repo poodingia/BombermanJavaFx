@@ -3,9 +3,13 @@ package uet.oop.bomberman.entities.character.enemy;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.AI.AI;
+import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Grass;
+import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import static uet.oop.bomberman.BombermanGame.*;
@@ -41,6 +45,7 @@ public abstract class Enemy extends Character {
             afterKill();
         } else {
             calculateMove();
+            checkCollisionWithBomber();
         }
     }
 
@@ -113,15 +118,14 @@ public abstract class Enemy extends Character {
         }
         Entity object;
         object = mapObjects.get(row).get(column);
-        if (!(object instanceof Grass) && this.intersect(object)) return false;
+        if (this.intersect(object)) return this.collide(object);
 
-        if (getBomb(row, column) != null) {
-            object = getBomb(row, column);
+        object = getBomb(row, column);
+        if (object != null) {
             if (this.intersect(object)) {
-                return false;
+                return this.collide(object);
             }
         }
-
 
         return true;
     }
@@ -145,6 +149,22 @@ public abstract class Enemy extends Character {
             if (deathAnimation > 0) --deathAnimation;
             else {
                 remove = true;
+            }
+        }
+    }
+
+    protected boolean collide(Entity e) {
+        if (e instanceof Wall || e instanceof Brick || e instanceof Bomb) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected void checkCollisionWithBomber() {
+        for (Character c: characters) {
+            if (c instanceof Bomber && c.intersect(this)) {
+                c.kill();
             }
         }
     }
