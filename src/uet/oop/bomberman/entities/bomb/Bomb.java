@@ -21,7 +21,7 @@ public class Bomb extends AnimatedEntity {
 
     protected int timeLeft = 240;
 
-    public Bomb(int xUnit, int yUnit, Image img, Bomber bomber) {
+    public Bomb(double xUnit, double yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img);
         this.bomber = bomber;
         printMap();

@@ -6,7 +6,7 @@ import uet.oop.bomberman.entities.AnimatedEntity;
 public class FlameSegment extends AnimatedEntity {
     private int direction;
 
-    public FlameSegment(int xUnit, int yUnit, Image img, int direction) {
+    public FlameSegment(double xUnit, double yUnit, Image img, int direction) {
         super(xUnit, yUnit, img);
         this.direction = direction;
     }

@@ -64,6 +64,7 @@ public class BombermanGame extends Application {
 
     @Override
     public void start(Stage stage) throws FileNotFoundException {
+        stage.setResizable(false);
         StartMenu(stage);
         pauseMenu(stage);
         //==========================================================
@@ -92,7 +93,7 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        levelLoader.loadLevel(2);
+        levelLoader.loadLevel(1);
         levelLoader.creatEntities();
     }
 
@@ -204,15 +205,6 @@ public class BombermanGame extends Application {
         characters.removeIf(Entity::isRemove);
         ground.forEach(Entity::update);
         ground.removeIf(Entity::isRemove);
-//        for (ArrayList<Entity> arrayList : mapObjects) {
-//            for (int i = 0; i < arrayList.size(); i++) {
-//                if (arrayList.get(i).isRemove()) {
-//                    arrayList.set(i,
-//                        new Grass(arrayList.get(i).getXCanvas(), arrayList.get(i).getXCanvas(),
-//                            Sprite.grass.getFxImage()));
-//                }
-//            }
-//        }
         for (int i = 1; i < mapObjects.size() - 1; i++) {
             for (int j = 1; j < mapObjects.get(i).size() - 1; j++) {
                 if (mapObjects.get(i).get(j).isRemove()) {
@@ -236,5 +228,14 @@ public class BombermanGame extends Application {
             }
         }));
         characters.forEach(g -> g.render(gc));
+    }
+
+    public static Bomb getBomb(int row, int column) {
+        for (Bomb b : bombs) {
+            if (b.getXCanvas() == row && b.getYCanvas() == column) {
+                return b;
+            }
+        }
+        return null;
     }
 }

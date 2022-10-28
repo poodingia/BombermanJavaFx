@@ -67,14 +67,13 @@ public class Bomber extends Character {
         }
         if (timeAfter <= 0) {
             remove = true;
-            System.exit(0);
         }
     }
 
     @Override
     public boolean canMove() {
-        int column = (this.x + this.x + 32) / 64;
-        int row = (this.y + this.y + 32) / 64;
+        int column = getXCanvas();
+        int row = getYCanvas();
         if (row <= 0) {
             row = 1;
         }
@@ -160,12 +159,6 @@ public class Bomber extends Character {
 
     public void placeBomb() {
         if (keyCodeList.size() >= 1 && bombs.size() < bombLeft) {
-            for (Bomb bomb : bombs) {
-                if (bomb.getXCanvas() == this.getXCanvas()
-                    && bomb.getYCanvas() == this.getYCanvas()) {
-                    return;
-                }
-            }
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(), this);
                 bombs.add(bomb);
@@ -181,7 +174,7 @@ public class Bomber extends Character {
         switch (direction) {
             case LEFT:
             case RIGHT:
-                for (int i = 0; i < 16; i++) {
+                for (int i = 0; i < 8; i++) {
                     e.setY(this.y + i);
                     if (!e.intersect(obstacle)) {
 
@@ -197,7 +190,7 @@ public class Bomber extends Character {
                 }
             case UP:
             case DOWN:
-                for (int i = 0; i < 16; i++) {
+                for (int i = 0; i < 8; i++) {
                     e.setX(this.x + i);
                     if (!e.intersect(obstacle)) {
 

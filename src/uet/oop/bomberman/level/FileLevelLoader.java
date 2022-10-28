@@ -3,8 +3,9 @@ import static uet.oop.bomberman.BombermanGame.characters;
 import static uet.oop.bomberman.BombermanGame.ground;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.character.Balloom;
-import uet.oop.bomberman.entities.character.Oneal;
+import uet.oop.bomberman.entities.character.enemy.Balloom;
+import uet.oop.bomberman.entities.character.enemy.Kondoria;
+import uet.oop.bomberman.entities.character.enemy.Oneal;
 import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.FlameBuff;
@@ -116,6 +117,8 @@ public class FileLevelLoader {
                         characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
+                    case '3':
+                        characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
                     default: {
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;

@@ -1,6 +1,7 @@
 module bomberman {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires java.desktop;
 
     opens uet.oop.bomberman to javafx.fxml;

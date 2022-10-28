@@ -6,10 +6,10 @@ import uet.oop.bomberman.entities.AnimatedEntity;
 public abstract class Character extends AnimatedEntity {
 
     protected boolean alive = true;
-    protected int speed = 1;
+    protected double speed = 1;
     protected boolean moving = false;
-    protected int velocityX = 0;
-    protected int velocityY = 0;
+    protected double velocityX = 0;
+    protected double velocityY = 0;
     protected int direction = -1; // Đứng yên
 
 
