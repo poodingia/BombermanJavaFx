@@ -9,7 +9,7 @@ public class Oneal extends Enemy {
     public Oneal(int x, int y, Image img) {
         super(x, y, img);
         this.points = 200;
-        this.speed = 1;
+        this.speed = 0.8;
         this.deadImage = Sprite.oneal_dead.getFxImage();
         ai = new AILow();
         direction = ai.calculateDirection();

@@ -16,10 +16,11 @@ import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Enemy extends Character {
-    protected int points;
-    protected AI ai;
+
     protected final double MAX_STEPS;
     protected final double rest;
+    protected int points;
+    protected AI ai;
     protected double steps;
 
     protected int timeAfter = 30;
@@ -66,24 +67,32 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void calculateMove() {
+        if (!alive) return;
         int xa = 0, ya = 0;
         if (steps <= 0) {
             direction = ai.calculateDirection();
             steps = MAX_STEPS;
         }
 
-        if (direction == UP) ya--;
-        if (direction == DOWN) ya++;
-        if (direction == LEFT) xa--;
-        if (direction == RIGHT) xa++;
+        if (direction == UP) {
+            ya--;
+        }
+        else if (direction == DOWN) {
+            ya++;
+        }
+        else if (direction == LEFT) {
+            xa--;
+        }
+        else if (direction == RIGHT) {
+            xa++;
+        }
 
-        if (canMove()) {
-            steps -= 1 + rest;
-            move(xa * speed, ya * speed);
-            moving = true;
-        } else {
+        moving = xa != 0 || ya != 0;
+        move(xa * speed, ya * speed);
+        steps -= 1;
+        if (!canMove()) {
             steps = 0;
-            moving = false;
+            moveBack(xa * speed, ya * speed);
         }
     }
 
@@ -91,30 +100,18 @@ public abstract class Enemy extends Character {
     protected boolean canMove() {
         int column = this.getXCanvas();
         int row = this.getYCanvas();
-        if (row <= 0) {
-            row = 1;
-        }
-        if (column <= 0) {
-            column = 1;
-        }
 
-        switch (direction) {
-            case UP:
-                row--;
-                break;
-            case DOWN:
-                row++;
-                break;
-            case LEFT:
-                column--;
-                break;
-            case RIGHT:
-                column++;
-                break;
+        Entity object = null;
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = column - 1; j <= column + 1; j++) {
+                object = mapObjects.get(i).get(j);
+                if (object instanceof Brick || object instanceof Wall) {
+                    if (this.intersect(object)) {
+                        return false;
+                    }
+                }
+            }
         }
-        Entity object;
-        object = mapObjects.get(row).get(column);
-        if (this.intersect(object)) return this.collide(object);
 
         object = getBomb(row, column);
         if (object != null) {
@@ -128,9 +125,13 @@ public abstract class Enemy extends Character {
 
 
     public void move(double xa, double ya) {
-        if (!alive) return;
         y += ya;
         x += xa;
+    }
+
+    public void moveBack(double xa, double ya) {
+        y -= ya;
+        x -= xa;
     }
 
     public void kill() {
@@ -141,10 +142,12 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void afterKill() {
-        if (timeAfter > 0) --timeAfter;
-        else {
-            if (deathAnimation > 0) --deathAnimation;
-            else {
+        if (timeAfter > 0) {
+            --timeAfter;
+        } else {
+            if (deathAnimation > 0) {
+                --deathAnimation;
+            } else {
                 remove = true;
             }
         }
@@ -155,7 +158,7 @@ public abstract class Enemy extends Character {
     }
 
     protected void checkCollisionWithBomber() {
-        for (Character c: characters) {
+        for (Character c : characters) {
             if (c instanceof Bomber && c.intersect(this)) {
                 c.kill();
             }
@@ -164,7 +167,7 @@ public abstract class Enemy extends Character {
 
     @Override
     public boolean intersect(Entity object) {
-        return (int) this.x < (int) object.getX() + 32 && (int) this.x + 32 > (int) object.getX()
+        return (int) this.x < (int) object.getX() + 32 && (int) this.x + 32  > (int) object.getX()
             && (int) this.y < (int) object.getY() + 32
             && (int) this.y + 32 > (int) object.getY();
     }

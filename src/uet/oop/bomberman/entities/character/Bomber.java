@@ -31,6 +31,7 @@ public class Bomber extends Character {
 
     @Override
     protected void calculateMove() {
+        if(!alive) return;
         if (keyCodeList.size() >= 1) {
             resetVelocity();
             KeyCode keyCode = keyCodeList.lastElement();

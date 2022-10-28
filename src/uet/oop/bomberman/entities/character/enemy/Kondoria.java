@@ -12,7 +12,7 @@ public class Kondoria extends Enemy {
     public Kondoria (int x, int y, Image img) {
         super(x, y, img);
         this.points = 100;
-        this.speed = 1;
+        this.speed = 0.5;
         this.deadImage = Sprite.kondoria_dead.getFxImage();
         ai = new AILow();
         direction = ai.calculateDirection();

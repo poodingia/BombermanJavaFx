@@ -9,7 +9,7 @@ public class Balloom extends Enemy {
     public Balloom (int x, int y, Image img) {
         super(x, y, img);
         this.points = 100;
-        this.speed = 1;
+        this.speed = 0.5;
         this.deadImage = Sprite.balloom_dead.getFxImage();
         ai = new AILow();
         direction = ai.calculateDirection();
