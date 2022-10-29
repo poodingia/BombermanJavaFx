@@ -67,7 +67,7 @@ public class Bomber extends Character {
         }
         if (timeAfter <= 0) {
             remove = true;
-            System.exit(0);
+            //System.exit(0);
         }
     }
 

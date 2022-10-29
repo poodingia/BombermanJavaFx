@@ -33,7 +33,7 @@ import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.FileLevelLoader;
-
+import uet.oop.bomberman.sound.mediaPlayer;
 public class BombermanGame extends Application {
 
     public static final int WIDTH = 31;
@@ -56,8 +56,9 @@ public class BombermanGame extends Application {
     private Scene MenuScene;
     private Scene pausedMenuScene;
     private boolean paused = true;
+    mediaPlayer soundTrack = new mediaPlayer("res/sounds/gunny_background.mp3");
 
-
+    Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -66,11 +67,12 @@ public class BombermanGame extends Application {
     public void start(Stage stage) throws FileNotFoundException {
         StartMenu(stage);
         pauseMenu(stage);
+        soundTrack.play();
         //==========================================================
 
         //loadMapFile(1);
         createMap();
-        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+
         characters.add(bomberman);
 
         GameScene.setOnKeyPressed(event -> {
@@ -132,6 +134,7 @@ public class BombermanGame extends Application {
         start.setOnAction(event -> {
             paused = false;
             stage.setScene(GameScene);
+            soundTrack.stop();
         });
 
         exit.setOnAction(event -> {
@@ -166,6 +169,7 @@ public class BombermanGame extends Application {
         resume.setOnAction(event -> {
             paused = false;
             GameSceneTrans(stage);
+            soundTrack.stop();
         });
 
         quit.setOnAction(event -> {
@@ -182,6 +186,7 @@ public class BombermanGame extends Application {
                         if (!paused) {
                             paused = true;
                             PausedSceneTrans(stage);
+                            soundTrack.play();
                         }
                     default:
                         break;
@@ -204,6 +209,7 @@ public class BombermanGame extends Application {
         characters.removeIf(Entity::isRemove);
         ground.forEach(Entity::update);
         ground.removeIf(Entity::isRemove);
+        //if(characters.)
 //        for (ArrayList<Entity> arrayList : mapObjects) {
 //            for (int i = 0; i < arrayList.size(); i++) {
 //                if (arrayList.get(i).isRemove()) {
@@ -223,7 +229,7 @@ public class BombermanGame extends Application {
         mapObjects.forEach(a -> a.forEach(Entity::update));
         characters.forEach(Entity::update);
         bombs.forEach(Bomb::update);
-
+        if (bomberman.isRemove()) System.exit(0);
     }
 
     public void render() {

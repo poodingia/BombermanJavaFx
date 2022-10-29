@@ -27,6 +27,12 @@
             <artifactId>javafx-graphics</artifactId>
             <version>15</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>20-ea+4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
