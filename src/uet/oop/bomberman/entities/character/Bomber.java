@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.character;
 
 import static uet.oop.bomberman.BombermanGame.bombs;
 import static uet.oop.bomberman.BombermanGame.characters;
+import static uet.oop.bomberman.BombermanGame.getBombAt;
 import static uet.oop.bomberman.BombermanGame.ground;
 import static uet.oop.bomberman.BombermanGame.keyCodeList;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
@@ -168,7 +169,8 @@ public class Bomber extends Character {
     }
 
     public void placeBomb() {
-        if (keyCodeList.size() >= 1 && bombs.size() < 1) {
+        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft &&
+            !getBombAt(getXCanvas(), getYCanvas())) {
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(),
                     this);

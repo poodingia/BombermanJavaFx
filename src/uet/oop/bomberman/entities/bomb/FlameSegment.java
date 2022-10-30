@@ -2,9 +2,12 @@ package uet.oop.bomberman.entities.bomb;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
+import uet.oop.bomberman.graphics.Sprite;
 
 public class FlameSegment extends AnimatedEntity {
-    private int direction;
+
+    private int timeLeft = 0;
+    private final int direction;
 
     public FlameSegment(double xUnit, double yUnit, Image img, int direction) {
         super(xUnit, yUnit, img);
@@ -13,10 +16,33 @@ public class FlameSegment extends AnimatedEntity {
 
     @Override
     public void update() {
-
+        chooseSprite();
     }
 
-    public int getDirection() {
-        return direction;
+    public void chooseSprite() {
+        timeLeft--;
+        if (timeLeft == -24) {
+            switch (direction) {
+                case LEFT:
+                case RIGHT:
+                    setImg(Sprite.explosion_horizontal1.getFxImage());
+                    break;
+                case UP:
+                case DOWN:
+                    setImg(Sprite.explosion_vertical1.getFxImage());
+                    break;
+            }
+        } else if (timeLeft == -48) {
+            switch (direction) {
+                case LEFT:
+                case RIGHT:
+                    setImg(Sprite.explosion_horizontal2.getFxImage());
+                    break;
+                case UP:
+                case DOWN:
+                    setImg(Sprite.explosion_vertical2.getFxImage());
+                    break;
+            }
+        }
     }
 }
