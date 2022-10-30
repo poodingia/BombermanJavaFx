@@ -1,7 +1,7 @@
 package uet.oop.bomberman.entities.character.enemy;
 
+import static uet.oop.bomberman.BombermanGame.bombs;
 import static uet.oop.bomberman.BombermanGame.characters;
-import static uet.oop.bomberman.BombermanGame.getBomb;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -23,13 +23,14 @@ public abstract class Enemy extends Character {
     protected AI ai;
     protected double steps;
 
+
     protected int timeAfter = 30;
     protected int deathAnimation = 30;
     protected Image deadImage;
 
     public Enemy(int x, int y, Image img) {
         super(x, y, img);
-        MAX_STEPS = Sprite.SCALED_SIZE / speed;
+        MAX_STEPS = Sprite.SCALED_SIZE * 3 / speed;
         steps = MAX_STEPS;
         rest = (MAX_STEPS - (int) MAX_STEPS) / MAX_STEPS;
     }
@@ -89,7 +90,7 @@ public abstract class Enemy extends Character {
 
         moving = xa != 0 || ya != 0;
         move(xa * speed, ya * speed);
-        steps -= 1;
+        steps -= 1 + rest;
         if (!canMove()) {
             steps = 0;
             moveBack(xa * speed, ya * speed);
@@ -113,10 +114,9 @@ public abstract class Enemy extends Character {
             }
         }
 
-        object = getBomb(row, column);
-        if (object != null) {
-            if (this.intersect(object)) {
-                return this.collide(object);
+        for(Bomb bomb : bombs) {
+            if(this.intersect(bomb)) {
+                return false;
             }
         }
 
@@ -154,7 +154,7 @@ public abstract class Enemy extends Character {
     }
 
     protected boolean collide(Entity e) {
-        return !(e instanceof Wall) && !(e instanceof Brick) && !(e instanceof Bomb);
+        return (e instanceof Wall) || (e instanceof Brick) || (e instanceof Bomb);
     }
 
     protected void checkCollisionWithBomber() {
@@ -165,10 +165,4 @@ public abstract class Enemy extends Character {
         }
     }
 
-    @Override
-    public boolean intersect(Entity object) {
-        return (int) this.x < (int) object.getX() + 32 && (int) this.x + 32  > (int) object.getX()
-            && (int) this.y < (int) object.getY() + 32
-            && (int) this.y + 32 > (int) object.getY();
-    }
 }

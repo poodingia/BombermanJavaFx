@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.character;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
+import uet.oop.bomberman.entities.Entity;
 
 public abstract class Character extends AnimatedEntity {
 

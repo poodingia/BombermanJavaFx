@@ -3,14 +3,9 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.util.Constant;
 
-public abstract class Entity {
-
-    protected static final int LEFT = 0;
-    protected static final int RIGHT = 1;
-    protected static final int UP = 2;
-    protected static final int DOWN = 3;
-
+public abstract class Entity implements Constant {
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected double x;
 
@@ -49,7 +44,7 @@ public abstract class Entity {
     public abstract void update();
 
     public boolean intersect(Entity object) {
-        return this.x < object.getX() + 32 && this.x + 32 - 8 > object.getX()
+        return this.x < object.getX() + 32 && this.x + 32 > object.getX()
             && this.y < object.getY() + 32
             && this.y + 32 > object.getY();
     }
@@ -80,4 +75,6 @@ public abstract class Entity {
     public int getYCanvas() {
         return (int) (y + y + 32) / (Sprite.SCALED_SIZE * 2);
     }
+
+
 }
