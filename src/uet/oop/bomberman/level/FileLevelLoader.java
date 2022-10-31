@@ -30,12 +30,6 @@ public class FileLevelLoader {
     private char[][] map;
     private int height;
     private int width;
-    private int level;
-
-
-    public char getMapAt(int i, int j) {
-        return map[i][j];
-    }
 
     public int getHeight() {
         return height;
@@ -121,12 +115,15 @@ public class FileLevelLoader {
                         characters.add(new Kondoria(x, y));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
+                    case '3':
+                        characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
+                        object = new Grass(x, y, Sprite.grass.getFxImage());
+                        break;
                     default: {
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
                     }
                 }
-
                 mapObjects.get(y).add(object);
             }
         }

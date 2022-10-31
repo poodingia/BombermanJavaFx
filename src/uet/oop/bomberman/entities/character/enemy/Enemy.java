@@ -1,5 +1,9 @@
 package uet.oop.bomberman.entities.character.enemy;
 
+import static uet.oop.bomberman.BombermanGame.bombs;
+import static uet.oop.bomberman.BombermanGame.characters;
+import static uet.oop.bomberman.BombermanGame.mapObjects;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.Entity;
@@ -8,33 +12,27 @@ import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.AI.AI;
 import uet.oop.bomberman.entities.tile.Brick;
-import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
-import static uet.oop.bomberman.BombermanGame.*;
-
 public abstract class Enemy extends Character {
+
+    protected final double MAX_STEPS;
+    protected final double rest;
     protected int points;
     protected AI ai;
-    protected final double MAX_STEPS;
-//    protected final double rest;
     protected double steps;
+
 
     protected int timeAfter = 30;
     protected int deathAnimation = 30;
     protected Image deadImage;
 
-    public Enemy(int x, int y, Image img, Image dead, int points, double speed) {
+    public Enemy(int x, int y, Image img) {
         super(x, y, img);
-
-        this.points = points;
-        this.speed = speed;
-        this.deadImage = dead;
-
-        MAX_STEPS = Sprite.SCALED_SIZE / speed;
-//        rest = (MAX_STEPS - (int) MAX_STEPS) / MAX_STEPS;
+        MAX_STEPS = Sprite.SCALED_SIZE * 3 / speed;
         steps = MAX_STEPS;
+        rest = (MAX_STEPS - (int) MAX_STEPS) / MAX_STEPS;
     }
 
     public void update() {
@@ -59,7 +57,7 @@ public abstract class Enemy extends Character {
                 animate = 0;
             } else {
                 img = Sprite.movingSprite(Sprite.mob_dead1,
-                        Sprite.mob_dead2, Sprite.mob_dead3, animate, 40).getFxImage();
+                    Sprite.mob_dead2, Sprite.mob_dead3, animate, 40).getFxImage();
             }
         }
 
@@ -70,24 +68,32 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void calculateMove() {
+        if (!alive) return;
         int xa = 0, ya = 0;
         if (steps <= 0) {
             direction = ai.calculateDirection();
             steps = MAX_STEPS;
         }
 
-        if (direction == UP) ya--;
-        if (direction == DOWN) ya++;
-        if (direction == LEFT) xa--;
-        if (direction == RIGHT) xa++;
+        if (direction == UP) {
+            ya--;
+        }
+        else if (direction == DOWN) {
+            ya++;
+        }
+        else if (direction == LEFT) {
+            xa--;
+        }
+        else if (direction == RIGHT) {
+            xa++;
+        }
 
-        if (canMove()) {
-            steps -= 1;
-            move(xa * speed, ya * speed);
-            moving = true;
-        } else {
+        moving = xa != 0 || ya != 0;
+        move(xa * speed, ya * speed);
+        steps -= 1 + rest;
+        if (!canMove()) {
             steps = 0;
-            moving = false;
+            moveBack(xa * speed, ya * speed);
         }
     }
 
@@ -95,45 +101,37 @@ public abstract class Enemy extends Character {
     protected boolean canMove() {
         int column = this.getXCanvas();
         int row = this.getYCanvas();
-        if (row <= 0) {
-            row = 1;
-        }
-        if (column <= 0) {
-            column = 1;
+
+        Entity object = null;
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = column - 1; j <= column + 1; j++) {
+                object = mapObjects.get(i).get(j);
+                if (object instanceof Brick || object instanceof Wall) {
+                    if (this.intersect(object)) {
+                        return false;
+                    }
+                }
+            }
         }
 
-        switch (direction) {
-            case UP:
-                row--;
-                break;
-            case DOWN:
-                row++;
-                break;
-            case LEFT:
-                column--;
-                break;
-            case RIGHT:
-                column++;
-                break;
-        }
-        Entity object;
-        object = mapObjects.get(row).get(column);
-        if (this.intersect(object)) return this.collide(object);
-
-        object = getBomb(row, column);
-        if (object != null) {
-            if (this.intersect(object)) {
-                return this.collide(object);
+        for(Bomb bomb : bombs) {
+            if(this.intersect(bomb)) {
+                return false;
             }
         }
 
         return true;
     }
 
+
     public void move(double xa, double ya) {
-        if (!alive) return;
         y += ya;
         x += xa;
+    }
+
+    public void moveBack(double xa, double ya) {
+        y -= ya;
+        x -= xa;
     }
 
     public void kill() {
@@ -144,28 +142,27 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void afterKill() {
-        if (timeAfter > 0) --timeAfter;
-        else {
-            if (deathAnimation > 0) --deathAnimation;
-            else {
+        if (timeAfter > 0) {
+            --timeAfter;
+        } else {
+            if (deathAnimation > 0) {
+                --deathAnimation;
+            } else {
                 remove = true;
             }
         }
     }
 
     protected boolean collide(Entity e) {
-        if (e instanceof Wall || e instanceof Brick || e instanceof Bomb) {
-            return false;
-        }
-
-        return true;
+        return (e instanceof Wall) || (e instanceof Brick) || (e instanceof Bomb);
     }
 
     protected void checkCollisionWithBomber() {
-        for (Character c: characters) {
+        for (Character c : characters) {
             if (c instanceof Bomber && c.intersect(this)) {
                 c.kill();
             }
         }
     }
+
 }

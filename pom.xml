@@ -30,9 +30,8 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>20-ea+4</version>
+            <version>15</version>
         </dependency>
-
     </dependencies>
 
     <build>

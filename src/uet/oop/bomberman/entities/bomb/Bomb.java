@@ -16,12 +16,11 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Bomb extends AnimatedEntity {
 
     protected Bomber bomber;
+    protected int timeLeft = 240;
     private Flame flame = null;
     private boolean harmful = false;
 
-    protected int timeLeft = 240;
-
-    public Bomb(int xUnit, int yUnit, Image img, Bomber bomber) {
+    public Bomb(double xUnit, double yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img);
         this.bomber = bomber;
         printMap();
@@ -34,7 +33,7 @@ public class Bomb extends AnimatedEntity {
         chooseSprite();
         countDown();
         animate();
-        if(flame != null) {
+        if (flame != null) {
             flame.update();
         }
     }
@@ -86,7 +85,7 @@ public class Bomb extends AnimatedEntity {
     }
 
     public boolean isHarmful() {
-        if(!bomber.intersect(this)) {
+        if (!bomber.intersect(this)) {
             harmful = true;
         }
         return harmful;
@@ -94,14 +93,12 @@ public class Bomb extends AnimatedEntity {
 
     public void printMap() {
         for (ArrayList<Entity> arrayList : mapObjects) {
-            for (Entity entity: arrayList) {
-                if(entity instanceof Brick) {
+            for (Entity entity : arrayList) {
+                if (entity instanceof Brick) {
                     System.out.print('x');
-                }
-                else if(entity instanceof Wall) {
+                } else if (entity instanceof Wall) {
                     System.out.print('#');
-                }
-                else if(entity instanceof Grass) {
+                } else if (entity instanceof Grass) {
                     System.out.print(' ');
                 }
             }
@@ -110,4 +107,11 @@ public class Bomb extends AnimatedEntity {
         System.out.println();
     }
 
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    public int getTimeLeft() {
+        return timeLeft;
+    }
 }
