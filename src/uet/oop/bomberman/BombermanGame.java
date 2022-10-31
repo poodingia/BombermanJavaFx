@@ -53,6 +53,10 @@ public class BombermanGame extends Application implements Constant, Style {
     VBox Lose = new VBox();
     private int lose = 0;
     mediaPlayer soundTrack = new mediaPlayer("res/music/gunny_background.mp3");
+    mediaPlayer pauseMusic = new mediaPlayer("res/music/pause.mp3");
+    mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
+    mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
+    mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
     private int level = 2;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
@@ -147,12 +151,14 @@ public class BombermanGame extends Application implements Constant, Style {
         menu.setSpacing(20);
         menu.getChildren().addAll(title, start, exit);
         start.setOnAction(event -> {
+            clicking.play();
             paused = false;
             stage.setScene(GameScene);
             soundTrack.stop();
         });
 
         exit.setOnAction(event -> {
+            clicking.play();
             stage.close();
         });
 
@@ -186,10 +192,13 @@ public class BombermanGame extends Application implements Constant, Style {
         Win.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         exit.setOnAction(event -> {
-            //click.play();
+            clicking.stop();
+            clicking.play();
             stage.close();
         });
         button.setOnAction(event -> {
+            clicking.stop();
+            clicking.play();
             GameSceneTrans(stage);
         });
     }
@@ -214,6 +223,8 @@ public class BombermanGame extends Application implements Constant, Style {
         Lose.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         exit.setOnAction(event -> {
+            clicking.stop();
+            clicking.play();
             stage.close();
         });
     }
@@ -236,26 +247,15 @@ public class BombermanGame extends Application implements Constant, Style {
         exit.setFont(font);
         waitMenu.getChildren().addAll(button, exit);
         button.setOnAction(event -> {
+            clicking.stop();
+            clicking.play();
             GameSceneTrans(stage);
         });
         exit.setOnAction(event -> {
+            clicking.stop();
+            clicking.play();
             stage.close();
         });
-    }
-
-    public void winTrans(Stage stage) {
-            stage.setScene(Victory);
-            //soundTrack.play();
-    }
-
-    public void loseTrans(Stage stage) {
-            stage.setScene(Defeated);
-            //soundTrack.play();
-    }
-
-    public void nextLevelTrans(Stage stage) {
-        stage.setScene(waitScene);
-        //soundTrack.play();
     }
 
     public void pauseMenu(Stage stage) {
@@ -283,12 +283,32 @@ public class BombermanGame extends Application implements Constant, Style {
         resume.setOnAction(event -> {
             paused = false;
             GameSceneTrans(stage);
-            soundTrack.stop();
+            pauseMusic.stop();
+            clicking.stop();
+            clicking.play();
         });
 
         quit.setOnAction(event -> {
+            clicking.stop();
+            clicking.play();
             stage.close();
         });
+    }
+
+    public void winTrans(Stage stage) {
+            stage.setScene(Victory);
+            winMusic.play();
+    }
+
+    public void loseTrans(Stage stage) {
+            stage.setScene(Defeated);
+            loseMusic.play();
+    }
+
+    public void nextLevelTrans(Stage stage) {
+        stage.setScene(waitScene);
+        winMusic.play();
+        //soundTrack.play();
     }
 
     public void handlePause(Stage stage) {
@@ -299,7 +319,7 @@ public class BombermanGame extends Application implements Constant, Style {
                     if (!paused) {
                         paused = true;
                         PausedSceneTrans(stage);
-                        soundTrack.play();
+                        pauseMusic.play();
                     }
                 }
             }
@@ -387,5 +407,4 @@ public class BombermanGame extends Application implements Constant, Style {
         }
         return false;
     }
-
 }
