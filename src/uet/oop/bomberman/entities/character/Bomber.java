@@ -66,7 +66,7 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-        alive = true;
+        alive = false;
     }
 
     @Override
@@ -142,23 +142,21 @@ public class Bomber extends Character {
                 img = Sprite.player_down.getFxImage();
                 if (moving) {
                     img = Sprite.movingSprite(Sprite.player_down_1, Sprite.player_down_2, animate,
-                            40)
-                        .getFxImage();
+                        40).getFxImage();
                 }
                 break;
             case LEFT:
                 img = Sprite.player_left.getFxImage();
                 if (moving) {
                     img = Sprite.movingSprite(Sprite.player_left_1, Sprite.player_left_2, animate,
-                            40)
-                        .getFxImage();
+                        40).getFxImage();
                 }
                 break;
             default:
                 img = Sprite.player_right.getFxImage();
                 if (moving) {
-                    img = Sprite.movingSprite(Sprite.player_right_1, Sprite.player_right_2,
-                        animate, 40).getFxImage();
+                    img = Sprite.movingSprite(Sprite.player_right_1, Sprite.player_right_2, animate,
+                        40).getFxImage();
                 }
                 break;
         }
@@ -169,8 +167,8 @@ public class Bomber extends Character {
     }
 
     public void placeBomb() {
-        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft &&
-            !getBombAt(getXCanvas(), getYCanvas())) {
+        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft && !getBombAt(getXCanvas(),
+            getYCanvas())) {
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(),
                     this);
@@ -251,7 +249,6 @@ public class Bomber extends Character {
 
     public boolean intersect(Entity object) {
         return this.x < object.getX() + 32 && this.x + 32 - 8 > object.getX()
-            && this.y < object.getY() + 32
-            && this.y + 32 > object.getY();
+            && this.y < object.getY() + 32 && this.y + 32 > object.getY();
     }
 }

@@ -27,9 +27,9 @@ public class AIHigh extends AI {
         int[][] blocks_in_array = new int[WIDTH * HEIGHT][2];
         int count_block = 0;
 
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                if (!(mapObjects.get(j).get(i) instanceof Grass)) {
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (!(mapObjects.get(i).get(j) instanceof Grass)) {
                     blocks_in_array[count_block][0] = i;
                     blocks_in_array[count_block][1] = j;
                     count_block++;

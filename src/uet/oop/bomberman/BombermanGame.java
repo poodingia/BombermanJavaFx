@@ -44,7 +44,7 @@ public class BombermanGame extends Application implements Constant, Style {
     VBox menu = new VBox();
     VBox pausedMenu = new VBox();
     mediaPlayer soundTrack = new mediaPlayer("res/music/gunny_background.mp3");
-    private int level = 2;
+    private int level = 1;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
@@ -55,6 +55,15 @@ public class BombermanGame extends Application implements Constant, Style {
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
+    }
+
+    public static boolean getBombAt(int x, int y) {
+        for (Bomb bomb : bombs) {
+            if (bomb.getXCanvas() == x && bomb.getYCanvas() == y) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -79,8 +88,10 @@ public class BombermanGame extends Application implements Constant, Style {
             @Override
             public void handle(long now) {
                 handlePause(stage);
-                render();
-                update();
+                if (!paused) {
+                    render();
+                    update();
+                }
                 handleGameOver();
                 handleTransition(stage);
             }
@@ -246,7 +257,6 @@ public class BombermanGame extends Application implements Constant, Style {
         createMap();
     }
 
-
     public void handleGameOver() {
         if (state == GAME_OVER) {
             reset();
@@ -281,15 +291,6 @@ public class BombermanGame extends Application implements Constant, Style {
         button.setOnAction(e -> {
             GameSceneTrans(stage);
         });
-    }
-
-    public static boolean getBombAt(int x, int y) {
-        for(Bomb bomb: bombs) {
-            if(bomb.getXCanvas() == x && bomb.getYCanvas() == y) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }
