@@ -104,17 +104,17 @@ public class FileLevelLoader {
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     case '1':
-                        characters.add(new Balloom(x, y));
+                        characters.add(new Balloom(x, y, Sprite.balloom_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
                     case '2':
-                        characters.add(new Oneal(x, y));
+                        characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
-                    case '3':
-                        characters.add(new Kondoria(x, y));
-                        object = new Grass(x, y, Sprite.grass.getFxImage());
-                        break;
+//                    case '3':
+//                        characters.add(new Kondoria(x, y, Sprite.));
+//                        object = new Grass(x, y, Sprite.grass.getFxImage());
+//                        break;
                     case '3':
                         characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());

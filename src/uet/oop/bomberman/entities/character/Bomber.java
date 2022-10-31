@@ -66,7 +66,7 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-        alive = true;
+        alive = false;
     }
 
     @Override
