@@ -26,7 +26,6 @@ public class Bomb extends AnimatedEntity {
     public Bomb(double xUnit, double yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img);
         this.bomber = bomber;
-        printMap();
     }
 
 

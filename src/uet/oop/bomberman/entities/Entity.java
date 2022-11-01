@@ -12,9 +12,6 @@ public abstract class Entity implements Constant {
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected double y;
 
-    protected int xCanvas;
-    protected int yCanvas;
-
     protected Image img;
     protected boolean remove = false;
 

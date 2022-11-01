@@ -38,7 +38,7 @@ public class AIHigh extends AI {
         }
         a_star.setBlocks(blocks_in_array, count_block);
         List<Node> path = a_star.findPath();
-        if (path.size() != 0) {
+        if (path.size() > 1) {
             int nextX = path.get(1).getCol();
             int nextY = path.get(1).getRow();
 
@@ -55,6 +55,6 @@ public class AIHigh extends AI {
                 return RIGHT;
             }
         }
-        return -1;
+        return random.nextInt(4);
     }
 }

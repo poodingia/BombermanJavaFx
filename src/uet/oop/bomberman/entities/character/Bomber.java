@@ -66,7 +66,7 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-        alive = false;
+        alive = false ;
     }
 
     @Override
@@ -185,32 +185,29 @@ public class Bomber extends Character {
         switch (direction) {
             case LEFT:
             case RIGHT:
-                for (int i = 0; i < 10; i++) {
+                for (int i = 1; i < 10; i++) {
                     e.setY(this.y + i);
                     if (!e.intersect(obstacle)) {
-
                         this.setY(e.getY());
                         return;
                     }
                     e.setY(this.y - i);
                     if (!e.intersect(obstacle)) {
-
                         this.setY(e.getY());
                         return;
                     }
                 }
+
             case UP:
             case DOWN:
-                for (int i = 0; i < 10; i++) {
+                for (int i = 1; i < 10; i++) {
                     e.setX(this.x + i);
                     if (!e.intersect(obstacle)) {
-
                         this.setX(e.getX());
                         return;
                     }
                     e.setX(this.x - i);
                     if (!e.intersect(obstacle)) {
-
                         this.setX(e.getX());
                         return;
                     }
