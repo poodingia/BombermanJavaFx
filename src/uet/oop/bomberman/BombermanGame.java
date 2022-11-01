@@ -182,9 +182,7 @@ public class BombermanGame extends Application implements Constant, Style {
         Win.getChildren().addAll(title, exit, replay);
         Win.setAlignment(Pos.CENTER);
         Win.setSpacing(20);
-        Win.setBackground(
-            new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-
+        Win.setStyle("-fx-background-image: url('win_menu.png')");
         setUpButton(replay);
         setUpButton(exit);
 
@@ -213,8 +211,7 @@ public class BombermanGame extends Application implements Constant, Style {
         Lose.getChildren().addAll(title, exit, replay);
         Lose.setAlignment(Pos.CENTER);
         Lose.setSpacing(20);
-        Lose.setBackground(
-            new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        Lose.setStyle("-fx-background-image: url('lose_menu.png')");
         setUpButton(exit);
         setUpButton(replay);
         exit.setOnAction(event -> {
@@ -237,7 +234,7 @@ public class BombermanGame extends Application implements Constant, Style {
         Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
         waitMenu.setAlignment(Pos.CENTER);
         waitMenu.setSpacing(20);
-        waitMenu.setStyle("-fx-background-image: url('start_menu.png')");
+        waitMenu.setStyle("-fx-background-image: url('nextLevel_menu.png')");
         setUpButton(nextLevel);
         setUpButton(exit);
         waitMenu.getChildren().addAll(nextLevel, exit);
