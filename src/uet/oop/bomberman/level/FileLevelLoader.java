@@ -64,7 +64,7 @@ public class FileLevelLoader {
         }
     }
 
-    public void creatEntities() {
+    public void createEntities() {
         for (int y = 0; y < getHeight(); y++) {
             mapObjects.add(new ArrayList<Entity>());
             for (int x = 0; x < getWidth(); x++) {
@@ -111,6 +111,10 @@ public class FileLevelLoader {
                         characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
+//                    case '3':
+//                        characters.add(new Kondoria(x, y, Sprite.));
+//                        object = new Grass(x, y, Sprite.grass.getFxImage());
+//                        break;
                     case '3':
                         characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());

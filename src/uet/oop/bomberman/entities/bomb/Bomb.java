@@ -12,6 +12,7 @@ import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.mediaPlayer;
 
 public class Bomb extends AnimatedEntity {
 
@@ -19,6 +20,8 @@ public class Bomb extends AnimatedEntity {
     protected int timeLeft = 240;
     private Flame flame = null;
     private boolean harmful = false;
+    mediaPlayer explodeSound = new mediaPlayer("res/sounds/explode.wav");
+    mediaPlayer bombPlant = new mediaPlayer("res/sounds/plantingBomb.wav");
 
     public Bomb(double xUnit, double yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img);
@@ -47,14 +50,16 @@ public class Bomb extends AnimatedEntity {
     }
 
     public void countDown() {
+        bombPlant.play();
         timeLeft--;
         explode();
     }
 
     public void explode() {
         if (timeLeft == 0) {
-            flame = new Flame(x / Sprite.SCALED_SIZE, y / Sprite.SCALED_SIZE, null, bomber);
+            flame = new Flame((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE, null, bomber);
             img = Sprite.bomb_exploded.getFxImage();
+            explodeSound.play();
         } else if (timeLeft == -24) {
             img = Sprite.bomb_exploded1.getFxImage();
         } else if (timeLeft == -48) {

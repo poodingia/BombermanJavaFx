@@ -30,6 +30,7 @@ Character:
 p - Bomber
 1 - Balloom
 2 - Oneal
+3 - Kondoria
 
 Items:
 b - Bomb Item
