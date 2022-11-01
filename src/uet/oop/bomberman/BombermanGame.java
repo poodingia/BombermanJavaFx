@@ -57,11 +57,12 @@ public class BombermanGame extends Application implements Constant, Style {
     mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
     mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
-    private int level = 2;
+    public static int level = 1;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
     private FileLevelLoader levelLoader = new FileLevelLoader();
+    //private Sprite updateSprite = new Sprite();
     private Scene GameScene;
     private Scene pausedMenuScene;
     private Scene Victory;
@@ -85,6 +86,7 @@ public class BombermanGame extends Application implements Constant, Style {
 
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         characters.add(bomberman);
+        levelLoader.updateSprite(level);
         createMap();
 
         GameScene.setOnKeyPressed(event -> {
@@ -102,7 +104,6 @@ public class BombermanGame extends Application implements Constant, Style {
                 update();
                 handleLose(stage);
                 handleWin(stage);
-                //handleTransition(stage);
             }
         };
         timer.start();
@@ -297,18 +298,20 @@ public class BombermanGame extends Application implements Constant, Style {
 
     public void winTrans(Stage stage) {
             stage.setScene(Victory);
+            winMusic.stop();
             winMusic.play();
     }
 
     public void loseTrans(Stage stage) {
             stage.setScene(Defeated);
+            loseMusic.stop();
             loseMusic.play();
     }
 
     public void nextLevelTrans(Stage stage) {
         stage.setScene(waitScene);
+        winMusic.stop();
         winMusic.play();
-        //soundTrack.play();
     }
 
     public void handlePause(Stage stage) {
@@ -350,6 +353,7 @@ public class BombermanGame extends Application implements Constant, Style {
         mapObjects.forEach(a -> a.forEach(Entity::update));
         characters.forEach(Entity::update);
         bombs.forEach(Bomb::update);
+        levelLoader.updateSprite(level);
     }
 
     public void render() {
@@ -374,6 +378,7 @@ public class BombermanGame extends Application implements Constant, Style {
         if (result == WON) {
             state = 0;
             level++;
+            levelLoader.updateSprite(level);
             if (level <= 3){
                 nextLevelTrans(stage);
             }

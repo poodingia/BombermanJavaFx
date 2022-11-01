@@ -1,7 +1,4 @@
 package uet.oop.bomberman.level;
-import static uet.oop.bomberman.BombermanGame.characters;
-import static uet.oop.bomberman.BombermanGame.ground;
-import static uet.oop.bomberman.BombermanGame.mapObjects;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Kondoria;
@@ -14,6 +11,7 @@ import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.tile.SpeedBuff;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.graphics.SpriteSheet;
 
 import java.util.List;
 
@@ -21,6 +19,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import static uet.oop.bomberman.BombermanGame.*;
+import static uet.oop.bomberman.graphics.Sprite.grass;
+import static uet.oop.bomberman.graphics.Sprite.wall;
+import static uet.oop.bomberman.graphics.Sprite.brick;
+import static uet.oop.bomberman.graphics.Sprite.portal;
+import static uet.oop.bomberman.graphics.Sprite.DEFAULT_SIZE;
 
 public class FileLevelLoader {
 
@@ -30,6 +34,7 @@ public class FileLevelLoader {
     private char[][] map;
     private int height;
     private int width;
+    public static int level = 1;
 
     public int getHeight() {
         return height;
@@ -111,10 +116,6 @@ public class FileLevelLoader {
                         characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
-//                    case '3':
-//                        characters.add(new Kondoria(x, y, Sprite.));
-//                        object = new Grass(x, y, Sprite.grass.getFxImage());
-//                        break;
                     case '3':
                         characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
                         object = new Grass(x, y, Sprite.grass.getFxImage());
@@ -126,6 +127,30 @@ public class FileLevelLoader {
                 }
                 mapObjects.get(y).add(object);
             }
+        }
+    }
+    public void updateSprite(int _level){
+        switch (_level){
+            case 1:
+                grass = new Sprite(DEFAULT_SIZE, 7, 15, SpriteSheet.tiles, 16, 16);
+                brick = new Sprite(DEFAULT_SIZE, 4, 15, SpriteSheet.tiles, 16, 16);
+                wall = new Sprite(DEFAULT_SIZE, 9, 15, SpriteSheet.tiles, 16, 16);
+                portal = new Sprite(DEFAULT_SIZE, 13, 15, SpriteSheet.tiles, 16, 16);
+                break;
+            case 2:
+                grass = new Sprite(DEFAULT_SIZE, 0, 15, SpriteSheet.tiles, 16, 16);
+                brick = new Sprite(DEFAULT_SIZE, 3, 15, SpriteSheet.tiles, 16, 16);
+                wall = new Sprite(DEFAULT_SIZE, 2, 15, SpriteSheet.tiles, 16, 16);
+                portal = new Sprite(DEFAULT_SIZE, 15, 15, SpriteSheet.tiles, 16, 16);
+                break;
+            case 3:
+                grass = new Sprite(DEFAULT_SIZE, 10, 15, SpriteSheet.tiles, 16, 16);
+                brick = new Sprite(DEFAULT_SIZE, 12, 15, SpriteSheet.tiles, 16, 16);
+                wall = new Sprite(DEFAULT_SIZE, 11, 15, SpriteSheet.tiles, 16, 16);
+                portal = new Sprite(DEFAULT_SIZE, 14, 15, SpriteSheet.tiles, 16, 16);
+                break;
+            default:
+                break;
         }
     }
 }
