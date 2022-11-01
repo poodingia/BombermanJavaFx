@@ -2,12 +2,11 @@ package uet.oop.bomberman.entities.character;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
-import uet.oop.bomberman.entities.Entity;
 
 public abstract class Character extends AnimatedEntity {
 
     protected boolean alive = true;
-    protected double speed = 1;
+    protected double speed;
     protected boolean moving = false;
     protected double velocityX = 0;
     protected double velocityY = 0;
@@ -27,8 +26,8 @@ public abstract class Character extends AnimatedEntity {
     protected abstract boolean canMove();
 
     public void move() {
-        this.x += velocityX*10;
-        this.y += velocityY*10;
+        this.x += velocityX;
+        this.y += velocityY;
     }
 
     public void resetVelocity() {

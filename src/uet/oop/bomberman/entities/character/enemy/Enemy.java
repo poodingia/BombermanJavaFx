@@ -18,11 +18,9 @@ import uet.oop.bomberman.graphics.Sprite;
 public abstract class Enemy extends Character {
 
     protected final double MAX_STEPS;
-    protected final double rest;
     protected int points;
     protected AI ai;
     protected double steps;
-
 
     protected int timeAfter = 30;
     protected int deathAnimation = 30;
@@ -30,9 +28,8 @@ public abstract class Enemy extends Character {
 
     public Enemy(int x, int y, Image img) {
         super(x, y, img);
-        MAX_STEPS = Sprite.SCALED_SIZE * 3 / speed;
+        MAX_STEPS = Sprite.SCALED_SIZE / speed;
         steps = MAX_STEPS;
-        rest = (MAX_STEPS - (int) MAX_STEPS) / MAX_STEPS;
     }
 
     public void update() {
@@ -56,8 +53,8 @@ public abstract class Enemy extends Character {
                 img = deadImage;
                 animate = 0;
             } else {
-                img = Sprite.movingSprite(Sprite.mob_dead1,
-                    Sprite.mob_dead2, Sprite.mob_dead3, animate, 40).getFxImage();
+                img = Sprite.movingSprite(Sprite.mob_dead1, Sprite.mob_dead2, Sprite.mob_dead3,
+                    animate, 40).getFxImage();
             }
         }
 
@@ -68,29 +65,27 @@ public abstract class Enemy extends Character {
 
     @Override
     protected void calculateMove() {
-        if (!alive) return;
+        if (!alive) {
+            return;
+        }
         int xa = 0, ya = 0;
-        if (steps <= 0) {
+        if (steps <= 0 || direction == -1) {
             direction = ai.calculateDirection();
             steps = MAX_STEPS;
         }
 
         if (direction == UP) {
             ya--;
-        }
-        else if (direction == DOWN) {
+        } else if (direction == DOWN) {
             ya++;
-        }
-        else if (direction == LEFT) {
+        } else if (direction == LEFT) {
             xa--;
-        }
-        else if (direction == RIGHT) {
+        } else if (direction == RIGHT) {
             xa++;
         }
-
         moving = xa != 0 || ya != 0;
         move(xa * speed, ya * speed);
-        steps -= 1 + rest;
+        steps -= 1;
         if (!canMove()) {
             steps = 0;
             moveBack(xa * speed, ya * speed);
@@ -114,8 +109,8 @@ public abstract class Enemy extends Character {
             }
         }
 
-        for(Bomb bomb : bombs) {
-            if(this.intersect(bomb)) {
+        for (Bomb bomb : bombs) {
+            if (this.intersect(bomb)) {
                 return false;
             }
         }
@@ -151,10 +146,6 @@ public abstract class Enemy extends Character {
                 remove = true;
             }
         }
-    }
-
-    protected boolean collide(Entity e) {
-        return (e instanceof Wall) || (e instanceof Brick) || (e instanceof Bomb);
     }
 
     protected void checkCollisionWithBomber() {

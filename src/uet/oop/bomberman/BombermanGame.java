@@ -1,5 +1,7 @@
 package uet.oop.bomberman;
 
+import static uet.oop.bomberman.graphics.ButtonUtil.setUpButton;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,20 +51,17 @@ public class BombermanGame extends Application implements Constant, Style {
     VBox pausedMenu = new VBox();
     VBox waitMenu = new VBox();
     VBox Win = new VBox();
-    private int win = 0;
     VBox Lose = new VBox();
-    private int lose = 0;
     mediaPlayer soundTrack = new mediaPlayer("res/music/gunny_background.mp3");
     mediaPlayer pauseMusic = new mediaPlayer("res/music/pause.mp3");
     mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
     mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
-    public static int level = 1;
+    private int level = 3;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
     private FileLevelLoader levelLoader = new FileLevelLoader();
-    //private Sprite updateSprite = new Sprite();
     private Scene GameScene;
     private Scene pausedMenuScene;
     private Scene Victory;
@@ -72,6 +71,15 @@ public class BombermanGame extends Application implements Constant, Style {
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
+    }
+
+    public static boolean getBombAt(int x, int y) {
+        for (Bomb bomb : bombs) {
+            if (bomb.getXCanvas() == x && bomb.getYCanvas() == y) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -90,10 +98,12 @@ public class BombermanGame extends Application implements Constant, Style {
         createMap();
 
         GameScene.setOnKeyPressed(event -> {
-            keyCodeList.add(event.getCode());
+            if (event.getCode().isArrowKey() || event.getCode() == KeyCode.SPACE) {
+                keyCodeList.add(event.getCode());
+            }
         });
         GameScene.setOnKeyReleased(event -> {
-            keyCodeList.clear();
+            keyCodeList.removeIf(keyCode -> keyCode == event.getCode());
         });
 
         AnimationTimer timer = new AnimationTimer() {
@@ -102,8 +112,8 @@ public class BombermanGame extends Application implements Constant, Style {
                 handlePause(stage);
                 render();
                 update();
-                handleLose(stage);
-                handleWin(stage);
+                handleEnd(stage);
+                //handleTransition(stage);
             }
         };
         timer.start();
@@ -135,18 +145,11 @@ public class BombermanGame extends Application implements Constant, Style {
 
         title.setStyle(
             "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        start.setStyle(BUTTON_NORMAL);
-        exit.setStyle(BUTTON_NORMAL);
-        Font font = Font.font("Verdana", FontWeight.BOLD, 30);
         Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
-        start.setFont(font);
-        exit.setFont(font);
         title.setFont(font1);
 
-        start.setOnMouseEntered(e -> start.setStyle(BUTTON_HOVER));
-        start.setOnMouseExited(e -> start.setStyle(BUTTON_NORMAL));
-        exit.setOnMouseEntered(e -> exit.setStyle(BUTTON_HOVER));
-        exit.setOnMouseExited(e -> exit.setStyle(BUTTON_NORMAL));
+        setUpButton(start);
+        setUpButton(exit);
 
         menu.setAlignment(Pos.CENTER);
         menu.setSpacing(20);
@@ -170,34 +173,28 @@ public class BombermanGame extends Application implements Constant, Style {
     public void winMenu(Stage stage) {
         Text title = new Text("VICTORY");
         title.setStyle(
-                "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
-        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
+            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+
         Button exit = new Button("EXIT");
-        Button button = new Button("REPLAY");
-        button.setStyle(BUTTON_NORMAL);
-        button.setFont(font);
+        Button replay = new Button("REPLAY");
 
         Victory = new Scene(Win, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
-
-        Win.getChildren().addAll(title, exit, button);
-
-        exit.setStyle(BUTTON_NORMAL);
-        exit.setFont(font);
-
-        button.setOnMouseEntered(e -> button.setStyle(BUTTON_HOVER));
-        button.setOnMouseExited(e -> button.setStyle(BUTTON_NORMAL));
-        exit.setOnMouseEntered(e -> exit.setStyle(BUTTON_HOVER));
-        exit.setOnMouseExited(e -> exit.setStyle(BUTTON_NORMAL));
+        Win.getChildren().addAll(title, exit, replay);
         Win.setAlignment(Pos.CENTER);
         Win.setSpacing(20);
-        Win.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        Win.setBackground(
+            new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        setUpButton(replay);
+        setUpButton(exit);
 
         exit.setOnAction(event -> {
             clicking.stop();
             clicking.play();
             stage.close();
         });
-        button.setOnAction(event -> {
+        replay.setOnAction(event -> {
+            winMusic.stop();
             clicking.stop();
             clicking.play();
             GameSceneTrans(stage);
@@ -207,49 +204,47 @@ public class BombermanGame extends Application implements Constant, Style {
     public void loseMenu(Stage stage) {
         Text title = new Text("DEFEATED");
         title.setStyle(
-                "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+            "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
 
         Button exit = new Button("EXIT");
+        Button replay = new Button("REPLAY");
         Defeated = new Scene(Lose, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
 
-        Lose.getChildren().addAll(title, exit);
-
-        exit.setStyle(BUTTON_NORMAL);
-        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
-        exit.setFont(font);
-        exit.setOnMouseEntered(e -> exit.setStyle(BUTTON_HOVER));
-        exit.setOnMouseExited(e -> exit.setStyle(BUTTON_NORMAL));
+        Lose.getChildren().addAll(title, exit, replay);
         Lose.setAlignment(Pos.CENTER);
         Lose.setSpacing(20);
-        Lose.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-
+        Lose.setBackground(
+            new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        setUpButton(exit);
+        setUpButton(replay);
         exit.setOnAction(event -> {
             clicking.stop();
             clicking.play();
             stage.close();
         });
+        replay.setOnAction(event -> {
+            loseMusic.stop();
+            clicking.stop();
+            clicking.play();
+            GameSceneTrans(stage);
+        });
     }
 
     public void nextLevelMenu(Stage stage) {
-        Button button = new Button("NEXT LEVEL");
+        Button nextLevel = new Button("NEXT LEVEL");
         Button exit = new Button("EXIT");
         waitScene = new Scene(waitMenu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
         Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
         waitMenu.setAlignment(Pos.CENTER);
         waitMenu.setSpacing(20);
         waitMenu.setStyle("-fx-background-image: url('start_menu.png')");
-        button.setOnMouseEntered(e -> button.setStyle(BUTTON_HOVER));
-        button.setOnMouseExited(e -> button.setStyle(BUTTON_NORMAL));
-        exit.setOnMouseEntered(e -> exit.setStyle(BUTTON_HOVER));
-        exit.setOnMouseExited(e -> exit.setStyle(BUTTON_NORMAL));
-        button.setStyle(BUTTON_NORMAL);
-        button.setFont(font);
-        exit.setStyle(BUTTON_NORMAL);
-        exit.setFont(font);
-        waitMenu.getChildren().addAll(button, exit);
-        button.setOnAction(event -> {
+        setUpButton(nextLevel);
+        setUpButton(exit);
+        waitMenu.getChildren().addAll(nextLevel, exit);
+        nextLevel.setOnAction(event -> {
             clicking.stop();
             clicking.play();
+            winMusic.stop();
             GameSceneTrans(stage);
         });
         exit.setOnAction(event -> {
@@ -262,24 +257,14 @@ public class BombermanGame extends Application implements Constant, Style {
     public void pauseMenu(Stage stage) {
         Button quit = new Button("QUIT");
         Button resume = new Button("CONTINUE");
-        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
-
         pausedMenuScene = new Scene(pausedMenu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
         pausedMenu.getChildren().addAll(resume, quit);
         pausedMenu.setAlignment(Pos.CENTER);
         pausedMenu.setSpacing(20);
         pausedMenu.setStyle("-fx-background-image: url('start_menu.png')");
 
-        quit.setStyle(BUTTON_NORMAL);
-        quit.setOnMouseEntered(e -> quit.setStyle(BUTTON_HOVER));
-        quit.setOnMouseExited(e -> quit.setStyle(BUTTON_NORMAL));
-
-        resume.setStyle(BUTTON_NORMAL);
-        resume.setOnMouseEntered(e -> resume.setStyle(BUTTON_HOVER));
-        resume.setOnMouseExited(e -> resume.setStyle(BUTTON_NORMAL));
-
-        resume.setFont(font);
-        quit.setFont(font);
+        setUpButton(quit);
+        setUpButton(resume);
 
         resume.setOnAction(event -> {
             paused = false;
@@ -297,21 +282,19 @@ public class BombermanGame extends Application implements Constant, Style {
     }
 
     public void winTrans(Stage stage) {
-            stage.setScene(Victory);
-            winMusic.stop();
-            winMusic.play();
+        stage.setScene(Victory);
+        winMusic.play();
     }
 
     public void loseTrans(Stage stage) {
-            stage.setScene(Defeated);
-            loseMusic.stop();
-            loseMusic.play();
+        stage.setScene(Defeated);
+        loseMusic.play();
     }
 
     public void nextLevelTrans(Stage stage) {
         stage.setScene(waitScene);
-        winMusic.stop();
         winMusic.play();
+        //soundTrack.play();
     }
 
     public void handlePause(Stage stage) {
@@ -375,41 +358,28 @@ public class BombermanGame extends Application implements Constant, Style {
         mapObjects.forEach(ArrayList::clear);
         keyCodeList.clear();
         bombs.clear();
+        state = 0;
+        levelLoader.updateSprite(level);
         if (result == WON) {
-            state = 0;
             level++;
-            levelLoader.updateSprite(level);
-            if (level <= 3){
+            if (level <= 3) {
                 nextLevelTrans(stage);
-            }
-            else if(level > 3){
+            } else if (level > 3) {
                 level = 1;
                 winTrans(stage);
             }
+        } else if (result == LOST) {
+            level = 1;
+            loseTrans(stage);
         }
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         characters.add(bomberman);
         createMap();
     }
 
-    public void handleLose(Stage stage) {
-        if (state == GAME_OVER && result == LOST) {
-            loseTrans(stage);
-        }
-    }
-
-    public void handleWin(Stage stage) {
-        if (state == GAME_OVER && result != LOST) {
+    public void handleEnd(Stage stage) {
+        if (state == GAME_OVER) {
             reset(stage);
         }
-    }
-
-    public static boolean getBombAt(int x, int y) {
-        for(Bomb bomb: bombs) {
-            if(bomb.getXCanvas() == x && bomb.getYCanvas() == y) {
-                return true;
-            }
-        }
-        return false;
     }
 }

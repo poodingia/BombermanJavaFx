@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.bomb;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class FlameSegment extends AnimatedEntity {
@@ -44,5 +45,11 @@ public class FlameSegment extends AnimatedEntity {
                     break;
             }
         }
+    }
+
+    @Override
+    public boolean intersect(Entity object) {
+        return this.x < object.getX() + 30 && this.x + 30 > object.getX()
+            && this.y < object.getY() + 30 && this.y + 30 > object.getY();
     }
 }

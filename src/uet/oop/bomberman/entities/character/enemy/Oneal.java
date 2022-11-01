@@ -23,14 +23,12 @@ public class Oneal extends Enemy {
     protected void chooseSprite() {
         switch (direction) {
             case LEFT:
-                img = Sprite.movingSprite(
-                    Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3,
-                    animate, 40).getFxImage();
+                img = Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2,
+                    Sprite.oneal_left3, animate, 40).getFxImage();
                 break;
             case RIGHT:
-                img = Sprite.movingSprite(
-                    Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3,
-                    animate, 40).getFxImage();
+                img = Sprite.movingSprite(Sprite.oneal_right1, Sprite.oneal_right2,
+                    Sprite.oneal_right3, animate, 40).getFxImage();
                 break;
             default:
                 break;

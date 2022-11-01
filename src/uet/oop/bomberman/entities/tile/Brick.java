@@ -36,7 +36,6 @@ public class Brick extends AnimatedEntity {
 
         if (timeLeft == - 80) {
             remove = true;
-            System.out.println("oops");
         }
     }
 

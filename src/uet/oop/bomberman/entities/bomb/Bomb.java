@@ -26,7 +26,6 @@ public class Bomb extends AnimatedEntity {
     public Bomb(double xUnit, double yUnit, Image img, Bomber bomber) {
         super(xUnit, yUnit, img);
         this.bomber = bomber;
-        printMap();
     }
 
 
@@ -57,7 +56,7 @@ public class Bomb extends AnimatedEntity {
 
     public void explode() {
         if (timeLeft == 0) {
-            flame = new Flame((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE, null, bomber);
+            flame = new Flame(getXCanvas(), getYCanvas(), null, bomber);
             img = Sprite.bomb_exploded.getFxImage();
             explodeSound.play();
         } else if (timeLeft == -24) {

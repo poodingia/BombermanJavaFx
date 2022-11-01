@@ -27,9 +27,9 @@ public class AIHigh extends AI {
         int[][] blocks_in_array = new int[WIDTH * HEIGHT][2];
         int count_block = 0;
 
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                if (!(mapObjects.get(j).get(i) instanceof Grass)) {
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (!(mapObjects.get(i).get(j) instanceof Grass)) {
                     blocks_in_array[count_block][0] = i;
                     blocks_in_array[count_block][1] = j;
                     count_block++;
@@ -38,23 +38,23 @@ public class AIHigh extends AI {
         }
         a_star.setBlocks(blocks_in_array, count_block);
         List<Node> path = a_star.findPath();
-        if (path.size() != 0) {
+        if (path.size() > 1) {
             int nextX = path.get(1).getCol();
             int nextY = path.get(1).getRow();
 
-            if (enemy.getYCanvas() / 32 > nextY) {
+            if (enemy.getYCanvas()  > nextY) {
                 return UP;
             }
-            if (enemy.getYCanvas() / 32 < nextY) {
+            if (enemy.getYCanvas()  < nextY) {
                 return DOWN;
             }
-            if (enemy.getXCanvas() / 32 > nextX) {
+            if (enemy.getXCanvas()  > nextX) {
                 return LEFT;
             }
-            if (enemy.getXCanvas() / 32 < nextX) {
+            if (enemy.getXCanvas()  < nextX) {
                 return RIGHT;
             }
         }
-        return -1;
+        return random.nextInt(4);
     }
 }

@@ -39,7 +39,6 @@ public class Kondoria extends Enemy {
         }
     }
 
-    @Override
     protected boolean collide(Entity e) {
         return !(e instanceof Wall) && !(e instanceof Bomb);
     }

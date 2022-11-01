@@ -1,4 +1,18 @@
 package uet.oop.bomberman.level;
+
+import static uet.oop.bomberman.BombermanGame.characters;
+import static uet.oop.bomberman.BombermanGame.ground;
+import static uet.oop.bomberman.BombermanGame.mapObjects;
+import static uet.oop.bomberman.graphics.Sprite.DEFAULT_SIZE;
+import static uet.oop.bomberman.graphics.Sprite.brick;
+import static uet.oop.bomberman.graphics.Sprite.grass;
+import static uet.oop.bomberman.graphics.Sprite.portal;
+import static uet.oop.bomberman.graphics.Sprite.wall;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Kondoria;
@@ -13,28 +27,17 @@ import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.graphics.SpriteSheet;
 
-import java.util.List;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-
-import static uet.oop.bomberman.BombermanGame.*;
-import static uet.oop.bomberman.graphics.Sprite.grass;
-import static uet.oop.bomberman.graphics.Sprite.wall;
-import static uet.oop.bomberman.graphics.Sprite.brick;
-import static uet.oop.bomberman.graphics.Sprite.portal;
-import static uet.oop.bomberman.graphics.Sprite.DEFAULT_SIZE;
 
 public class FileLevelLoader {
 
-    public FileLevelLoader() {
-
-    }
     private char[][] map;
     private int height;
     private int width;
     public static int level = 1;
+
+    public FileLevelLoader() {
+
+    }
 
     public int getHeight() {
         return height;
@@ -129,8 +132,9 @@ public class FileLevelLoader {
             }
         }
     }
-    public void updateSprite(int _level){
-        switch (_level){
+
+    public void updateSprite(int _level) {
+        switch (_level) {
             case 1:
                 grass = new Sprite(DEFAULT_SIZE, 7, 15, SpriteSheet.tiles, 16, 16);
                 brick = new Sprite(DEFAULT_SIZE, 4, 15, SpriteSheet.tiles, 16, 16);

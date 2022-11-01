@@ -21,7 +21,6 @@ import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.tile.SpeedBuff;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.sound.mediaPlayer;
 
 public class Bomber extends Character {
 
@@ -29,7 +28,6 @@ public class Bomber extends Character {
     private int timeAfter = 100;
 
     private int flameLength = 2;
-
 
 
     public Bomber(int x, int y, Image img) {
@@ -68,7 +66,7 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-        alive = true;
+        alive = false;
     }
 
     @Override
@@ -144,23 +142,21 @@ public class Bomber extends Character {
                 img = Sprite.player_down.getFxImage();
                 if (moving) {
                     img = Sprite.movingSprite(Sprite.player_down_1, Sprite.player_down_2, animate,
-                            40)
-                        .getFxImage();
+                        40).getFxImage();
                 }
                 break;
             case LEFT:
                 img = Sprite.player_left.getFxImage();
                 if (moving) {
                     img = Sprite.movingSprite(Sprite.player_left_1, Sprite.player_left_2, animate,
-                            40)
-                        .getFxImage();
+                        40).getFxImage();
                 }
                 break;
             default:
                 img = Sprite.player_right.getFxImage();
                 if (moving) {
-                    img = Sprite.movingSprite(Sprite.player_right_1, Sprite.player_right_2,
-                        animate, 40).getFxImage();
+                    img = Sprite.movingSprite(Sprite.player_right_1, Sprite.player_right_2, animate,
+                        40).getFxImage();
                 }
                 break;
         }
@@ -171,15 +167,14 @@ public class Bomber extends Character {
     }
 
     public void placeBomb() {
-        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft &&
-            !getBombAt(getXCanvas(), getYCanvas())) {
-            if (keyCodeList.lastElement() == KeyCode.SPACE) {
-
+        if (keyCodeList.size() > 0 && keyCodeList.lastElement() == KeyCode.SPACE) {
+            if (keyCodeList.size() >= 1 && bombs.size() < bombLeft
+                && !getBombAt(getXCanvas(), getYCanvas())) {
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(),
                     this);
                 bombs.add(bomb);
-                keyCodeList.pop();
             }
+            keyCodeList.pop();
         }
     }
 
@@ -190,32 +185,29 @@ public class Bomber extends Character {
         switch (direction) {
             case LEFT:
             case RIGHT:
-                for (int i = 0; i < 10; i++) {
+                for (int i = 1; i < 10; i++) {
                     e.setY(this.y + i);
                     if (!e.intersect(obstacle)) {
-
                         this.setY(e.getY());
                         return;
                     }
                     e.setY(this.y - i);
                     if (!e.intersect(obstacle)) {
-
                         this.setY(e.getY());
                         return;
                     }
                 }
+
             case UP:
             case DOWN:
-                for (int i = 0; i < 10; i++) {
+                for (int i = 1; i < 10; i++) {
                     e.setX(this.x + i);
                     if (!e.intersect(obstacle)) {
-
                         this.setX(e.getX());
                         return;
                     }
                     e.setX(this.x - i);
                     if (!e.intersect(obstacle)) {
-
                         this.setX(e.getX());
                         return;
                     }
@@ -228,16 +220,10 @@ public class Bomber extends Character {
             if (entity instanceof Buff || entity instanceof Portal) {
                 if (this.intersect(entity)) {
                     if (entity instanceof BombBuff) {
-//                        item.stop();
-//                        item.play();
                         bombLeft++;
                     } else if (entity instanceof FlameBuff) {
-//                        item.stop();
-//                        item.play();
                         flameLength++;
                     } else if (entity instanceof SpeedBuff) {
-//                        item.stop();
-//                        item.play();
                         speed += 0.25;
                     } else if (entity instanceof Portal) {
                         if (characters.size() == 1) {
@@ -260,7 +246,6 @@ public class Bomber extends Character {
 
     public boolean intersect(Entity object) {
         return this.x < object.getX() + 32 && this.x + 32 - 8 > object.getX()
-            && this.y < object.getY() + 32
-            && this.y + 32 > object.getY();
+            && this.y < object.getY() + 32 && this.y + 32 > object.getY();
     }
 }
