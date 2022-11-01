@@ -42,16 +42,16 @@ public class AIHigh extends AI {
             int nextX = path.get(1).getCol();
             int nextY = path.get(1).getRow();
 
-            if (enemy.getYCanvas() / 32 > nextY) {
+            if (enemy.getYCanvas()  > nextY) {
                 return UP;
             }
-            if (enemy.getYCanvas() / 32 < nextY) {
+            if (enemy.getYCanvas()  < nextY) {
                 return DOWN;
             }
-            if (enemy.getXCanvas() / 32 > nextX) {
+            if (enemy.getXCanvas()  > nextX) {
                 return LEFT;
             }
-            if (enemy.getXCanvas() / 32 < nextX) {
+            if (enemy.getXCanvas()  < nextX) {
                 return RIGHT;
             }
         }

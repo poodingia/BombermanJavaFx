@@ -21,7 +21,6 @@ import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.tile.SpeedBuff;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.sound.mediaPlayer;
 
 public class Bomber extends Character {
 
@@ -29,7 +28,6 @@ public class Bomber extends Character {
     private int timeAfter = 100;
 
     private int flameLength = 2;
-
 
 
     public Bomber(int x, int y, Image img) {
@@ -169,10 +167,9 @@ public class Bomber extends Character {
     }
 
     public void placeBomb() {
-        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft && !getBombAt(getXCanvas(),
-            getYCanvas())) {
+        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft
+            && !getBombAt(getXCanvas(), getYCanvas())) {
             if (keyCodeList.lastElement() == KeyCode.SPACE) {
-
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(),
                     this);
                 bombs.add(bomb);
@@ -226,16 +223,10 @@ public class Bomber extends Character {
             if (entity instanceof Buff || entity instanceof Portal) {
                 if (this.intersect(entity)) {
                     if (entity instanceof BombBuff) {
-//                        item.stop();
-//                        item.play();
                         bombLeft++;
                     } else if (entity instanceof FlameBuff) {
-//                        item.stop();
-//                        item.play();
                         flameLength++;
                     } else if (entity instanceof SpeedBuff) {
-//                        item.stop();
-//                        item.play();
                         speed += 0.25;
                     } else if (entity instanceof Portal) {
                         if (characters.size() == 1) {
