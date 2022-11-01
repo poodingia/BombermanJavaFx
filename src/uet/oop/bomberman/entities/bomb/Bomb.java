@@ -56,7 +56,7 @@ public class Bomb extends AnimatedEntity {
 
     public void explode() {
         if (timeLeft == 0) {
-            flame = new Flame((int)x / Sprite.SCALED_SIZE, (int)y / Sprite.SCALED_SIZE, null, bomber);
+            flame = new Flame(getXCanvas(), getYCanvas(), null, bomber);
             img = Sprite.bomb_exploded.getFxImage();
             explodeSound.play();
         } else if (timeLeft == -24) {

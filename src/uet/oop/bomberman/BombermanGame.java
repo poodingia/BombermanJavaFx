@@ -98,10 +98,12 @@ public class BombermanGame extends Application implements Constant, Style {
         createMap();
 
         GameScene.setOnKeyPressed(event -> {
-            keyCodeList.add(event.getCode());
+            if (event.getCode().isArrowKey() || event.getCode() == KeyCode.SPACE) {
+                keyCodeList.add(event.getCode());
+            }
         });
         GameScene.setOnKeyReleased(event -> {
-            keyCodeList.clear();
+            keyCodeList.removeIf(keyCode -> keyCode == event.getCode());
         });
 
         AnimationTimer timer = new AnimationTimer() {
@@ -175,7 +177,6 @@ public class BombermanGame extends Application implements Constant, Style {
 
         Button exit = new Button("EXIT");
         Button replay = new Button("REPLAY");
-
 
         Victory = new Scene(Win, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
         Win.getChildren().addAll(title, exit, replay);

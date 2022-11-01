@@ -66,7 +66,7 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-        alive = false ;
+        alive = false;
     }
 
     @Override
@@ -167,14 +167,14 @@ public class Bomber extends Character {
     }
 
     public void placeBomb() {
-        if (keyCodeList.size() >= 1 && bombs.size() < bombLeft
-            && !getBombAt(getXCanvas(), getYCanvas())) {
-            if (keyCodeList.lastElement() == KeyCode.SPACE) {
+        if (keyCodeList.size() > 0 && keyCodeList.lastElement() == KeyCode.SPACE) {
+            if (keyCodeList.size() >= 1 && bombs.size() < bombLeft
+                && !getBombAt(getXCanvas(), getYCanvas())) {
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(),
                     this);
                 bombs.add(bomb);
-                keyCodeList.pop();
             }
+            keyCodeList.pop();
         }
     }
 
