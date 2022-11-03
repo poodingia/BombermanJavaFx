@@ -111,18 +111,6 @@ public class FileLevelLoader {
                         ground.add(new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage()));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
-                    case '1':
-                        characters.add(new Balloom(x, y, Sprite.balloom_left1.getFxImage()));
-                        object = new Grass(x, y, Sprite.grass.getFxImage());
-                        break;
-                    case '2':
-                        characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
-                        object = new Grass(x, y, Sprite.grass.getFxImage());
-                        break;
-                    case '3':
-                        characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
-                        object = new Grass(x, y, Sprite.grass.getFxImage());
-                        break;
                     default: {
                         object = new Grass(x, y, Sprite.grass.getFxImage());
                         break;
@@ -131,6 +119,28 @@ public class FileLevelLoader {
                 mapObjects.get(y).add(object);
             }
         }
+    }
+
+    public void createCharacter() {
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                char c = map[y][x];
+                switch (c) {
+                    // Thêm grass
+                    case '1':
+                        characters.add(new Balloom(x, y, Sprite.balloom_left1.getFxImage()));
+                        break;
+                    case '2':
+                        characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
+                        break;
+                    case '3':
+                        characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
     }
 
     public void updateSprite(int _level) {

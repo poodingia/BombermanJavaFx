@@ -9,12 +9,15 @@ import uet.oop.bomberman.entities.tile.Grass;
 
 public class AIHigh extends AI {
 
-    Bomber bomber;
-    Enemy enemy;
+    private Bomber bomber;
+    private Enemy enemy;
+
+    private AStar a_star;
 
     public AIHigh(Bomber bomber, Enemy e) {
         this.bomber = bomber;
         enemy = e;
+        a_star = new AStar(HEIGHT, WIDTH);
     }
 
     @Override
@@ -22,8 +25,10 @@ public class AIHigh extends AI {
         Node initial_node = new Node(enemy.getYCanvas(), enemy.getXCanvas());
         Node final_node = new Node(bomber.getYCanvas(), bomber.getXCanvas());
 
-        AStar a_star = new AStar(HEIGHT, WIDTH, initial_node, final_node);
-
+        a_star.setInitial_node(initial_node);
+        a_star.setFinal_node(final_node);
+        a_star.setNodes();
+        //mark all block on the map
         int[][] blocks_in_array = new int[WIDTH * HEIGHT][2];
         int count_block = 0;
 
@@ -37,10 +42,13 @@ public class AIHigh extends AI {
             }
         }
         a_star.setBlocks(blocks_in_array, count_block);
+
+        //start finding the path
         List<Node> path = a_star.findPath();
         if (path.size() > 1) {
             int nextX = path.get(1).getCol();
             int nextY = path.get(1).getRow();
+            System.out.println(nextX + " " + nextY);
 
             if (enemy.getYCanvas()  > nextY) {
                 return UP;

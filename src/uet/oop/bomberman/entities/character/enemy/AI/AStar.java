@@ -15,41 +15,31 @@ public class AStar {
     private Node initial_node;
     private Node final_node;
 
-    public AStar(int rows, int cols, Node initial_node, Node final_node) {
-        setInitial_node(initial_node);
-        setFinal_node(final_node);
+    public AStar(int rows, int cols) {
         this.search_area = new Node[rows][cols];
         this.open_list = new PriorityQueue<>(Comparator.comparing(Node::getF));
         this.closed_set = new HashSet<>();
-        setNodes();
     }
+
+//    public AStar(int rows, int cols, Node initial_node, Node final_node) {
+//        setInitial_node(initial_node);
+//        setFinal_node(final_node);
+//        this.search_area = new Node[rows][cols];
+//        this.open_list = new PriorityQueue<>(Comparator.comparing(Node::getF));
+//        this.closed_set = new HashSet<>();
+//        setNodes();
+//    }
 
     public Node[][] getSearch_area() {
         return search_area;
-    }
-
-    public void setSearch_area(Node[][] search_area) {
-        this.search_area = search_area;
     }
 
     public PriorityQueue<Node> getOpen_list() {
         return open_list;
     }
 
-    public void setOpen_list(PriorityQueue<Node> open_list) {
-        this.open_list = open_list;
-    }
-
     public Set<Node> getClosed_set() {
         return closed_set;
-    }
-
-    public void setClosed_set(Set<Node> closed_set) {
-        this.closed_set = closed_set;
-    }
-
-    public Node getInitial_node() {
-        return initial_node;
     }
 
     public void setInitial_node(Node initial_node) {
@@ -106,11 +96,11 @@ public class AStar {
                 addAdjacentNodes(current_node);
             }
         }
-        return new ArrayList<Node>();
+        return new ArrayList<>();
     }
 
     public List<Node> getPath(Node current_node) {
-        List<Node> path = new ArrayList<Node>();
+        List<Node> path = new ArrayList<>();
         path.add(current_node);
         Node parent;
         while ((parent = current_node.getParent()) != null) {
@@ -122,14 +112,15 @@ public class AStar {
 
     private void checkNode(Node current_node, int col, int row) {
         Node adjacent_node = getSearch_area()[row][col];
-        if (!adjacent_node.isIs_block() && !getClosed_set().contains(adjacent_node)) {
+        if (!adjacent_node.isIs_block()
+                && !getClosed_set().contains(adjacent_node)) {
             if (!getOpen_list().contains(adjacent_node)) {
                 adjacent_node.setNodeData(current_node);
                 getOpen_list().add(adjacent_node);
             } else {
                 boolean changed = adjacent_node.checkBetterPath(current_node);
                 if (changed) {
-                    getOpen_list().remove(adjacent_node);
+                    getOpen_list().remove(current_node);
                     getOpen_list().add(adjacent_node);
                 }
             }
@@ -141,12 +132,6 @@ public class AStar {
         int col = current_node.getCol();
         int upper_row = row - 1;
         if (upper_row >= 0) {
-            if (col - 1 >= 0) {
-                checkNode(current_node, col - 1, upper_row);
-            }
-            if (col + 1 < getSearch_area()[0].length) {
-                checkNode(current_node, col + 1, upper_row);
-            }
             checkNode(current_node, col, upper_row);
         }
     }
@@ -156,12 +141,6 @@ public class AStar {
         int col = current_node.getCol();
         int lower_row = row + 1;
         if (lower_row < getSearch_area().length) {
-            if (col - 1 >= 0) {
-                checkNode(current_node, col - 1, lower_row);
-            }
-            if (col + 1 < getSearch_area()[0].length) {
-                checkNode(current_node, col + 1, lower_row);
-            }
             checkNode(current_node, col, lower_row);
         }
     }

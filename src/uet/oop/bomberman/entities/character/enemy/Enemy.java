@@ -17,10 +17,12 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Enemy extends Character {
 
+    protected int invulnerableFrame = 48;
     protected final double MAX_STEPS;
+    protected double steps;
     protected int points;
     protected AI ai;
-    protected double steps;
+
 
     protected int timeAfter = 30;
     protected int deathAnimation = 30;
@@ -33,6 +35,7 @@ public abstract class Enemy extends Character {
     }
 
     public void update() {
+        if (invulnerableFrame > 0) invulnerableFrame--;
         chooseSprite();
         animate();
 
@@ -130,7 +133,7 @@ public abstract class Enemy extends Character {
     }
 
     public void kill() {
-        alive = false;
+        if (invulnerableFrame <= 0) alive = false;
         // add point to score
         // play music
     }

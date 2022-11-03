@@ -94,15 +94,14 @@ public class Node {
     }
 
     public void setNodeData(Node current_node) {
-        int g_cost = current_node.getG();
         setParent(current_node);
-        setG(g_cost);
+        setG(current_node.getG() + 1);
         calculateFinalCost();
     }
 
     public boolean checkBetterPath(Node current_node) {
-        int g_cost = current_node.getG();
-        if (g_cost < getG()) {
+        int f_cost = current_node.getF();
+        if (f_cost < getF()) {
             setNodeData(current_node);
             return true;
         }
