@@ -110,8 +110,10 @@ public class BombermanGame extends Application implements Constant, Style {
             @Override
             public void handle(long now) {
                 handlePause(stage);
-                render();
-                update();
+                if (!paused) {
+                    render();
+                    update();
+                }
                 handleEnd(stage);
                 //handleTransition(stage);
             }
