@@ -25,7 +25,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -58,7 +57,7 @@ public class BombermanGame extends Application implements Constant, Style {
     mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
     mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
-    private int level = 2;
+    private int level = 1;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
@@ -123,6 +122,7 @@ public class BombermanGame extends Application implements Constant, Style {
     public void createMap() {
         levelLoader.loadLevel(level);
         levelLoader.createEntities();
+        levelLoader.createCharacter();
         //System.out.println(level);
     }
 
@@ -130,11 +130,10 @@ public class BombermanGame extends Application implements Constant, Style {
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        Stat.setStyle("-fx-font: 15px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
         root.getChildren().add(Stat);
         root.getChildren().add(canvas);
 
-        root.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #e7e0b6 0%, #f1de44 50%); -fx-text-fill: yellow;");
+        root.setStyle("-fx-background-color: white; -fx-text-fill: yellow;");
         menu.setStyle("-fx-background-image: url('start_menu.png')");
         // Tao scene
         GameScene = new Scene(root);
@@ -184,7 +183,9 @@ public class BombermanGame extends Application implements Constant, Style {
         Win.getChildren().addAll(title, exit, replay);
         Win.setAlignment(Pos.CENTER);
         Win.setSpacing(20);
-        Win.setStyle("-fx-background-image: url('win_menu.png')");
+        Win.setBackground(
+            new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
         setUpButton(replay);
         setUpButton(exit);
 
@@ -213,7 +214,8 @@ public class BombermanGame extends Application implements Constant, Style {
         Lose.getChildren().addAll(title, exit, replay);
         Lose.setAlignment(Pos.CENTER);
         Lose.setSpacing(20);
-        Lose.setStyle("-fx-background-image: url('lose_menu.png')");
+        Lose.setBackground(
+            new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         setUpButton(exit);
         setUpButton(replay);
         exit.setOnAction(event -> {
@@ -236,7 +238,7 @@ public class BombermanGame extends Application implements Constant, Style {
         Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
         waitMenu.setAlignment(Pos.CENTER);
         waitMenu.setSpacing(20);
-        waitMenu.setStyle("-fx-background-image: url('nextLevel_menu.png')");
+        waitMenu.setStyle("-fx-background-image: url('start_menu.png')");
         setUpButton(nextLevel);
         setUpButton(exit);
         waitMenu.getChildren().addAll(nextLevel, exit);

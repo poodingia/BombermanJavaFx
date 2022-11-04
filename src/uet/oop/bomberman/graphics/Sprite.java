@@ -113,6 +113,24 @@ public class Sprite {
 	
 	public static Sprite kondoria_dead = new Sprite(DEFAULT_SIZE, 10, 8, SpriteSheet.tiles, 16, 16);
 	
+	//PONTAN
+	public static Sprite pontan_left1 = new Sprite(DEFAULT_SIZE, 12, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_left2 = new Sprite(DEFAULT_SIZE, 14, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_left3 = new Sprite(DEFAULT_SIZE, 12, 7, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_left4 = new Sprite(DEFAULT_SIZE, 14, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_left5 = new Sprite(DEFAULT_SIZE, 12, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_left6 = new Sprite(DEFAULT_SIZE, 14, 7, SpriteSheet.tiles, 16, 16);
+
+	public static Sprite pontan_right1 = new Sprite(DEFAULT_SIZE, 13, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_right2 = new Sprite(DEFAULT_SIZE, 15, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_right3 = new Sprite(DEFAULT_SIZE, 13, 7, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_right4 = new Sprite(DEFAULT_SIZE, 15, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_right5 = new Sprite(DEFAULT_SIZE, 13, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_right6 = new Sprite(DEFAULT_SIZE, 15, 7, SpriteSheet.tiles, 16, 16);
+
+	public static Sprite pontan_dead_1 = new Sprite(DEFAULT_SIZE, 12, 8, SpriteSheet.tiles, 16, 16);
+	public static Sprite pontan_dead_2 = new Sprite(DEFAULT_SIZE, 14, 8, SpriteSheet.tiles, 16, 16);
+
 	//ALL
 	public static Sprite mob_dead1 = new Sprite(DEFAULT_SIZE, 15, 0, SpriteSheet.tiles, 16, 16);
 	public static Sprite mob_dead2 = new Sprite(DEFAULT_SIZE, 15, 1, SpriteSheet.tiles, 16, 16);
@@ -227,6 +245,34 @@ public class Sprite {
 		}
 			
 		return x2;
+	}
+
+	public static Sprite movingSprite(Sprite normal, Sprite x1, Sprite x2
+			, Sprite x3, Sprite x4, Sprite x5, int animate, int time) {
+		int calc = animate % time;
+		int diff = (2 * time) / 6;
+
+		if(calc < diff) {
+			return normal;
+		}
+
+		if(calc < diff * 2) {
+			return x1;
+		}
+
+		if(calc < diff * 3) {
+			return x2;
+		}
+
+		if(calc < diff * 4) {
+			return x3;
+		}
+
+		if(calc < diff * 5) {
+			return x1;
+		}
+
+		return x5;
 	}
 	
 	public static Sprite movingSprite(Sprite x1, Sprite x2, int animate, int time) {
