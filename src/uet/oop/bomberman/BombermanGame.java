@@ -25,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -57,7 +58,7 @@ public class BombermanGame extends Application implements Constant, Style {
     mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
     mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
-    private int level = 3;
+    private int level = 2;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
@@ -129,10 +130,11 @@ public class BombermanGame extends Application implements Constant, Style {
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
+        Stat.setStyle("-fx-font: 15px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
         root.getChildren().add(Stat);
         root.getChildren().add(canvas);
 
-        root.setStyle("-fx-background-color: white; -fx-text-fill: yellow;");
+        root.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, #e7e0b6 0%, #f1de44 50%); -fx-text-fill: yellow;");
         menu.setStyle("-fx-background-image: url('start_menu.png')");
         // Tao scene
         GameScene = new Scene(root);
