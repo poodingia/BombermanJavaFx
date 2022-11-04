@@ -115,6 +115,11 @@ public abstract class Enemy extends Character {
             }
         }
 
+        for(Character character: characters) {
+            if(this.intersect(character) && character instanceof Enemy && !this.equals(character)) {
+                return false;
+            }
+        }
         return true;
     }
 
