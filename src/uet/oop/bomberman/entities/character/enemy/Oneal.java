@@ -36,36 +36,11 @@ public class Oneal extends Enemy {
 
     @Override
     public void update() {
-//        if(((AIHigh)ai).isChasing()) {
-//            this.speed = 1.0;
-//        } else this.speed = 0.5;
-        super.update();
-    }
-
-    @Override
-    protected void calculateMove() {
         if (this.getX() == this.getXCanvas() * Sprite.SCALED_SIZE
                 && this.getY() == this.getYCanvas() * Sprite.SCALED_SIZE) {
-            direction = ai.calculateDirection();
+            if (((AIHigh)ai).isChasing()) speed = 1;
+            else speed = 0.5;
         }
-        if (!alive) {
-            return;
-        }
-        int xa = 0, ya = 0;
-
-        if (direction == UP) {
-            ya--;
-        } else if (direction == DOWN) {
-            ya++;
-        } else if (direction == LEFT) {
-            xa--;
-        } else if (direction == RIGHT) {
-            xa++;
-        }
-        moving = xa != 0 || ya != 0;
-        move(xa * speed, ya * speed);
-        if (!canMove()) {
-            moveBack(xa * speed, ya * speed);
-        }
+        super.update();
     }
 }
