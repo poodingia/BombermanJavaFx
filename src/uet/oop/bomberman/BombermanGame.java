@@ -92,9 +92,7 @@ public class BombermanGame extends Application implements Constant, Style {
         nextLevelMenu(stage);
         soundTrack.play();
 
-        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        characters.add(bomberman);
-        levelLoader.updateSprite(level);
+
         createMap();
 
         GameScene.setOnKeyPressed(event -> {
@@ -115,17 +113,18 @@ public class BombermanGame extends Application implements Constant, Style {
                     update();
                 }
                 handleEnd(stage);
-                //handleTransition(stage);
             }
         };
         timer.start();
     }
 
     public void createMap() {
+        levelLoader.updateSprite(level);
         levelLoader.loadLevel(level);
+        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        characters.add(bomberman);
         levelLoader.createEntities();
         levelLoader.createCharacter();
-        //System.out.println(level);
     }
 
     public void StartMenu(Stage stage) {
@@ -197,6 +196,7 @@ public class BombermanGame extends Application implements Constant, Style {
             stage.close();
         });
         replay.setOnAction(event -> {
+            paused = false;
             winMusic.stop();
             clicking.stop();
             clicking.play();
@@ -226,6 +226,7 @@ public class BombermanGame extends Application implements Constant, Style {
             stage.close();
         });
         replay.setOnAction(event -> {
+            paused = false;
             loseMusic.stop();
             clicking.stop();
             clicking.play();
@@ -375,13 +376,12 @@ public class BombermanGame extends Application implements Constant, Style {
             level = 1;
             loseTrans(stage);
         }
-        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        characters.add(bomberman);
         createMap();
     }
 
     public void handleEnd(Stage stage) {
         if (state == GAME_OVER) {
+            paused = true;
             reset(stage);
         }
     }

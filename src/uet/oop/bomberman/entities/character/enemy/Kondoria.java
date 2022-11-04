@@ -1,19 +1,20 @@
 package uet.oop.bomberman.entities.character.enemy;
 
 import static uet.oop.bomberman.BombermanGame.bombs;
+import static uet.oop.bomberman.BombermanGame.characters;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.AI.AILow;
-import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Kondoria extends Enemy {
 
-    public Kondoria (int x, int y, Image img) {
+    public Kondoria(int x, int y, Image img) {
         super(x, y, img);
         this.points = 100;
         this.speed = 0.5;
@@ -44,27 +45,34 @@ public class Kondoria extends Enemy {
     }
 
     @Override
-        protected boolean canMove() {
-            int column = this.getXCanvas();
-            int row = this.getYCanvas();
+    protected boolean canMove() {
+        int column = this.getXCanvas();
+        int row = this.getYCanvas();
 
-            Entity object = null;
-            for (int i = row - 1; i <= row + 1; i++) {
-                for (int j = column - 1; j <= column + 1; j++) {
-                    object = mapObjects.get(i).get(j);
-                    if (object instanceof Wall) {
-                        if (this.intersect(object)) {
-                            return false;
-                        }
+        Entity object = null;
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = column - 1; j <= column + 1; j++) {
+                object = mapObjects.get(i).get(j);
+                if (object instanceof Wall) {
+                    if (this.intersect(object)) {
+                        return false;
                     }
                 }
             }
+        }
 
-        for(Bomb bomb : bombs) {
+        for (Bomb bomb : bombs) {
             if (this.intersect(bomb)) {
                 return false;
             }
         }
-            return true;
+
+        for (Character character : characters) {
+            if (this.intersect(character) && character instanceof Enemy && !this.equals(
+                character)) {
+                return false;
+            }
         }
+        return true;
     }
+}
