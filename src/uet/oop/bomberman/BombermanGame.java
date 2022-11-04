@@ -57,7 +57,7 @@ public class BombermanGame extends Application implements Constant, Style {
     mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
     mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
-    private int level = 1;
+    private int level = 2;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
