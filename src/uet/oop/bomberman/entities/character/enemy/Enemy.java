@@ -88,6 +88,7 @@ public abstract class Enemy extends Character {
         moving = xa != 0 || ya != 0;
         move(xa * speed, ya * speed);
         if (!canMove()) {
+            direction = ai.calculateDirection();
             moveBack(xa * speed, ya * speed);
         }
     }
