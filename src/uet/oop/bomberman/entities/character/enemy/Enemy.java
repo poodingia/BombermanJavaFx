@@ -66,16 +66,15 @@ public abstract class Enemy extends Character {
 
     protected abstract void chooseSprite();
 
-    @Override
     protected void calculateMove() {
+        if (this.getX() == this.getXCanvas() * Sprite.SCALED_SIZE
+                && this.getY() == this.getYCanvas() * Sprite.SCALED_SIZE) {
+            direction = ai.calculateDirection();
+        }
         if (!alive) {
             return;
         }
         int xa = 0, ya = 0;
-        if (steps <= 0 || direction == -1) {
-            direction = ai.calculateDirection();
-            steps = MAX_STEPS;
-        }
 
         if (direction == UP) {
             ya--;
@@ -88,9 +87,7 @@ public abstract class Enemy extends Character {
         }
         moving = xa != 0 || ya != 0;
         move(xa * speed, ya * speed);
-        steps -= 1;
         if (!canMove()) {
-            steps = 0;
             moveBack(xa * speed, ya * speed);
         }
     }

@@ -17,6 +17,7 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Kondoria;
 import uet.oop.bomberman.entities.character.enemy.Oneal;
+import uet.oop.bomberman.entities.character.enemy.Pontan;
 import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.FlameBuff;
@@ -136,6 +137,8 @@ public class FileLevelLoader {
                     case '3':
                         characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
                         break;
+                    case '4':
+                        characters.add(new Pontan(x, y, Sprite.pontan_left1.getFxImage()));
                     default:
                         break;
                     }
