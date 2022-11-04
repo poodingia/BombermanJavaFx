@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.AI.AIHigher;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
@@ -66,6 +67,12 @@ public class Pontan extends Enemy {
 
         for(Bomb bomb : bombs) {
             if (this.intersect(bomb)) {
+                return false;
+            }
+        }
+
+        for(Character character: characters) {
+            if(this.intersect(character) && character instanceof Enemy && !this.equals(character)) {
                 return false;
             }
         }
