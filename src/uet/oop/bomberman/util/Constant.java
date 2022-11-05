@@ -12,5 +12,6 @@ public interface Constant {
     int WON = 10;
     int LOST = 13;
 
-
+    int FREEZE = 22;
+    int MOVE = FREEZE - 1;
 }
