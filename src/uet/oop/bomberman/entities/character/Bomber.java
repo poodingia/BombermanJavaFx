@@ -186,12 +186,12 @@ public class Bomber extends Character {
             case LEFT:
             case RIGHT:
                 for (int i = 1; i < 10; i++) {
-                    e.setY(this.y + i);
+                    e.setY(this.y + i * speed);
                     if (!e.intersect(obstacle)) {
                         this.setY(e.getY());
                         return;
                     }
-                    e.setY(this.y - i);
+                    e.setY(this.y - i * speed);
                     if (!e.intersect(obstacle)) {
                         this.setY(e.getY());
                         return;
@@ -201,12 +201,12 @@ public class Bomber extends Character {
             case UP:
             case DOWN:
                 for (int i = 1; i < 10; i++) {
-                    e.setX(this.x + i);
+                    e.setX(this.x + i * speed);
                     if (!e.intersect(obstacle)) {
                         this.setX(e.getX());
                         return;
                     }
-                    e.setX(this.x - i);
+                    e.setX(this.x - i * speed);
                     if (!e.intersect(obstacle)) {
                         this.setX(e.getX());
                         return;
