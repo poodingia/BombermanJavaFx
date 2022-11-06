@@ -58,7 +58,7 @@ public class BombermanGame extends Application implements Constant, Style {
     mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
     mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
-    private int level = 2;
+    private int level = 1;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
@@ -134,7 +134,6 @@ public class BombermanGame extends Application implements Constant, Style {
 
         root.getChildren().add(Stat);
         root.getChildren().add(canvas);
-
         root.setStyle("-fx-background-color: #e7e0b6; -fx-text-fill: yellow;");
         menu.setStyle("-fx-background-image: url('start_menu.png')");
         // Tao scene

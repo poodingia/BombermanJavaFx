@@ -70,11 +70,11 @@ public class AIHigh extends AI {
                 int nextX = path.get(1).getCol();
                 int nextY = path.get(1).getRow();
                 isChasing = true;
-                System.out.println("Path:");
-                for (Node n : path) {
-                    System.out.println(n.getCol() + ", " + n.getRow());
-                }
-                System.out.println("\n");
+//                System.out.println("Path:");
+//                for (Node n : path) {
+//                    System.out.println(n.getCol() + ", " + n.getRow());
+//                }
+//                System.out.println("\n");
 
                 if (enemy.getYCanvas()  > nextY) {
                     return UP;

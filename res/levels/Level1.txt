@@ -31,6 +31,7 @@ p - Bomber
 1 - Balloom
 2 - Oneal
 3 - Kondoria
+4 - Pontan
 
 Items:
 b - Bomb Item
