@@ -1,11 +1,8 @@
 package uet.oop.bomberman.entities.character.enemy;
 
-import static uet.oop.bomberman.BombermanGame.bombs;
-import static uet.oop.bomberman.BombermanGame.characters;
-import static uet.oop.bomberman.BombermanGame.mapObjects;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
@@ -17,21 +14,17 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Enemy extends Character {
 
-    protected int invulnerableFrame = 48;
-    protected final double MAX_STEPS;
-    protected double steps;
-    protected int points;
-    protected AI ai;
+    private int invulnerableFrame = 120;
+    int points;
+    AI ai;
 
 
-    protected int timeAfter = 30;
-    protected int deathAnimation = 30;
-    protected Image deadImage;
+    private int timeAfter = 30;
+    private int deathAnimation = 30;
+    Image deadImage;
 
-    public Enemy(int x, int y, Image img) {
-        super(x, y, img);
-        MAX_STEPS = Sprite.SCALED_SIZE / speed;
-        steps = MAX_STEPS;
+    Enemy(int x, int y, Image img, Board b) {
+        super(x, y, img, b);
     }
 
     public void update() {
@@ -98,10 +91,10 @@ public abstract class Enemy extends Character {
         int column = this.getXCanvas();
         int row = this.getYCanvas();
 
-        Entity object = null;
+        Entity object;
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = column - 1; j <= column + 1; j++) {
-                object = mapObjects.get(i).get(j);
+                object = board.mapObjects.get(i).get(j);
                 if(this.intersect(object)) {
                     if(this.collide(object) == FREEZE) {
                         return false;
@@ -110,7 +103,7 @@ public abstract class Enemy extends Character {
             }
         }
 
-        for (Bomb bomb : bombs) {
+        for (Bomb bomb : board.bombs) {
             if (this.intersect(bomb)) {
                 return false;
             }
@@ -119,12 +112,12 @@ public abstract class Enemy extends Character {
     }
 
 
-    public void move(double xa, double ya) {
+    private void move(double xa, double ya) {
         y += ya;
         x += xa;
     }
 
-    public void moveBack(double xa, double ya) {
+    private void moveBack(double xa, double ya) {
         y -= ya;
         x -= xa;
     }
@@ -144,19 +137,20 @@ public abstract class Enemy extends Character {
                 --deathAnimation;
             } else {
                 remove = true;
+                board.setScore(board.getScore() + points);
             }
         }
     }
 
-    protected void checkCollisionWithBomber() {
-        for (Character c : characters) {
+    private void checkCollisionWithBomber() {
+        for (Character c : board.characters) {
             if (c instanceof Bomber && c.intersect(this)) {
                 c.kill();
             }
         }
     }
 
-    public int collide(Entity entity) {
+    int collide(Entity entity) {
         if(entity instanceof Wall) {
             return FREEZE;
         } else if (entity instanceof Brick) {

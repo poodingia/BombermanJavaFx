@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-public class AStar {
+class AStar {
 
     private Node[][] search_area;
     private PriorityQueue<Node> open_list;
@@ -30,15 +30,15 @@ public class AStar {
 //        setNodes();
 //    }
 
-    public Node[][] getSearch_area() {
+    private Node[][] getSearch_area() {
         return search_area;
     }
 
-    public PriorityQueue<Node> getOpen_list() {
+    private PriorityQueue<Node> getOpen_list() {
         return open_list;
     }
 
-    public Set<Node> getClosed_set() {
+    private Set<Node> getClosed_set() {
         return closed_set;
     }
 
@@ -46,7 +46,7 @@ public class AStar {
         this.initial_node = initial_node;
     }
 
-    public Node getFinal_node() {
+    private Node getFinal_node() {
         return final_node;
     }
 
@@ -99,7 +99,7 @@ public class AStar {
         return new ArrayList<>();
     }
 
-    public List<Node> getPath(Node current_node) {
+    private List<Node> getPath(Node current_node) {
         List<Node> path = new ArrayList<>();
         path.add(current_node);
         Node parent;

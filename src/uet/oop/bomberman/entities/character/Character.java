@@ -1,20 +1,23 @@
 package uet.oop.bomberman.entities.character;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.AnimatedEntity;
 
 public abstract class Character extends AnimatedEntity {
 
+    protected Board board;
     protected boolean alive = true;
     protected double speed;
     protected boolean moving = false;
-    protected double velocityX = 0;
-    protected double velocityY = 0;
+    double velocityX = 0;
+    double velocityY = 0;
     protected int direction = -1; // Đứng yên
 
 
-    public Character(int xUnit, int yUnit, Image img) {
+    public Character(int xUnit, int yUnit, Image img, Board b) {
         super(xUnit, yUnit, img);
+        board = b;
     }
 
     protected abstract void calculateMove();
@@ -25,17 +28,17 @@ public abstract class Character extends AnimatedEntity {
 
     protected abstract boolean canMove();
 
-    public void move() {
-        this.x += velocityX*10;
-        this.y += velocityY*10;
+    void move() {
+        this.x += velocityX;
+        this.y += velocityY;
     }
 
-    public void resetVelocity() {
+    void resetVelocity() {
         this.velocityY = 0;
         this.velocityX = 0;
     }
 
-    public void moveBack() {
+    void moveBack() {
         this.x -= velocityX;
         this.y -= velocityY;
     }

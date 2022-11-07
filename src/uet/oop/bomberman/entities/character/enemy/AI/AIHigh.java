@@ -1,11 +1,8 @@
 package uet.oop.bomberman.entities.character.enemy.AI;
 
-import static uet.oop.bomberman.BombermanGame.bombs;
-import static uet.oop.bomberman.BombermanGame.mapObjects;
-
 import java.util.List;
 
-import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.entities.tile.Grass;
@@ -13,18 +10,20 @@ import uet.oop.bomberman.entities.tile.Grass;
 //Use for Oneal and other tracking enemies with collision with Brick
 public class AIHigh extends AI {
 
+    private Board board;
     private Bomber bomber;
-    private Enemy enemy;
+    private final Enemy enemy;
 
     private AStar a_star;
 
     private boolean isChasing;
 
-    public AIHigh(Bomber bomber, Enemy e) {
+    public AIHigh(Bomber bomber, Enemy e, Board b) {
         this.bomber = bomber;
         enemy = e;
         a_star = new AStar(HEIGHT, WIDTH);
         isChasing = false;
+        board = b;
     }
 
     public boolean isChasing() {
@@ -49,7 +48,7 @@ public class AIHigh extends AI {
 
             for (int i = 0; i < HEIGHT; i++) {
                 for (int j = 0; j < WIDTH; j++) {
-                    if (!(mapObjects.get(i).get(j) instanceof Grass)) {
+                    if (!(board.mapObjects.get(i).get(j) instanceof Grass)) {
                         blocks_in_array[count_block][0] = i;
                         blocks_in_array[count_block][1] = j;
                         count_block++;
@@ -57,11 +56,6 @@ public class AIHigh extends AI {
                 }
             }
 
-//            for (Bomb b : bombs) {
-//                blocks_in_array[count_block][0] = b.getYCanvas();
-//                blocks_in_array[count_block][1] = b.getXCanvas();
-//                count_block++;
-//            }
             a_star.setBlocks(blocks_in_array, count_block);
 
             //start finding the path
@@ -70,11 +64,6 @@ public class AIHigh extends AI {
                 int nextX = path.get(1).getCol();
                 int nextY = path.get(1).getRow();
                 isChasing = true;
-//                System.out.println("Path:");
-//                for (Node n : path) {
-//                    System.out.println(n.getCol() + ", " + n.getRow());
-//                }
-//                System.out.println("\n");
 
                 if (enemy.getYCanvas()  > nextY) {
                     return UP;

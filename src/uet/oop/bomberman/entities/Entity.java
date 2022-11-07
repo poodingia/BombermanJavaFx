@@ -62,7 +62,7 @@ public abstract class Entity implements Constant {
         this.y = y;
     }
 
-    public void setImg(Image img) {
+    protected void setImg(Image img) {
         this.img = img;
     }
 
@@ -73,5 +73,10 @@ public abstract class Entity implements Constant {
         return (int) (y + y + 32) / (Sprite.SCALED_SIZE * 2);
     }
 
-
+    public void setXCanvas(int xUnit) {
+        this.x = xUnit * Sprite.SCALED_SIZE;
+    }
+    public void setYCanvas(int yUnit) {
+        this.y = yUnit * Sprite.SCALED_SIZE;
+    }
 }

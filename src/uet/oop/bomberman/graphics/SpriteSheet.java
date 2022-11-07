@@ -14,12 +14,12 @@ public class SpriteSheet {
 	private String _path;
 	public final int SIZE;
 	public int[] _pixels;
-	public BufferedImage image;
+	private BufferedImage image;
 
 	public static SpriteSheet tiles = new SpriteSheet("/textures/classic1.png", 256);
 	public static SpriteSheet tiles2 = new SpriteSheet("/textures/classic1(2).png", 256);
 	
-	public SpriteSheet(String path, int size) {
+	private SpriteSheet(String path, int size) {
 		_path = path;
 		SIZE = size;
 		_pixels = new int[SIZE * SIZE];

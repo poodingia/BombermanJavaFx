@@ -1,13 +1,13 @@
 package uet.oop.bomberman.entities.character.enemy;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.character.enemy.AI.AILow;
-import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Balloom extends Enemy {
-    public Balloom (int x, int y, Image img) {
-        super(x, y, img);
+    public Balloom (int x, int y, Image img, Board b) {
+        super(x, y, img , b);
         this.points = 100;
         this.speed = 0.5;
         this.deadImage = Sprite.balloom_dead.getFxImage();

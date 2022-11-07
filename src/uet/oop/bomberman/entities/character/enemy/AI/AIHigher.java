@@ -1,5 +1,6 @@
 package uet.oop.bomberman.entities.character.enemy.AI;
 
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
@@ -8,22 +9,20 @@ import uet.oop.bomberman.entities.tile.Grass;
 
 import java.util.List;
 
-import static uet.oop.bomberman.BombermanGame.bombs;
-import static uet.oop.bomberman.BombermanGame.mapObjects;
-
 //Use for Kondoria and other tracking enemies without collision with Brick
 //Add bomb dodging later
 public class AIHigher extends AI {
-
-    private Bomber bomber;
-    private Enemy enemy;
+    private Board board;
+    private final Bomber bomber;
+    private final Enemy enemy;
 
     private AStar a_star;
 
-    public AIHigher(Bomber bomber, Enemy e) {
+    public AIHigher(Bomber bomber, Enemy e, Board b) {
         this.bomber = bomber;
         enemy = e;
         a_star = new AStar(HEIGHT, WIDTH);
+        board = b;
     }
 
     @Override
@@ -40,8 +39,8 @@ public class AIHigher extends AI {
 
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
-                if (!(mapObjects.get(i).get(j) instanceof Grass)
-                        && !(mapObjects.get(i).get(j) instanceof Brick)) {
+                if (!(board.mapObjects.get(i).get(j) instanceof Grass)
+                        && !(board.mapObjects.get(i).get(j) instanceof Brick)) {
                     blocks_in_array[count_block][0] = i;
                     blocks_in_array[count_block][1] = j;
                     count_block++;
@@ -49,7 +48,7 @@ public class AIHigher extends AI {
             }
         }
 
-        for (Bomb b : bombs) {
+        for (Bomb b : board.bombs) {
             blocks_in_array[count_block][0] = b.getYCanvas();
             blocks_in_array[count_block][1] = b.getXCanvas();
             count_block++;

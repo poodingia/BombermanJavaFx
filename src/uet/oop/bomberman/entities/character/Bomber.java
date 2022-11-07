@@ -1,16 +1,8 @@
 package uet.oop.bomberman.entities.character;
 
-import static uet.oop.bomberman.BombermanGame.bombs;
-import static uet.oop.bomberman.BombermanGame.characters;
-import static uet.oop.bomberman.BombermanGame.getBombAt;
-import static uet.oop.bomberman.BombermanGame.ground;
-import static uet.oop.bomberman.BombermanGame.keyCodeList;
-import static uet.oop.bomberman.BombermanGame.mapObjects;
-import static uet.oop.bomberman.BombermanGame.result;
-import static uet.oop.bomberman.BombermanGame.state;
-
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.tile.BombBuff;
@@ -31,8 +23,8 @@ public class Bomber extends Character {
     private int flameLength = 2;
     public static boolean remote = false;
 
-    public Bomber(int x, int y, Image img) {
-        super(x, y, img);
+    public Bomber(int x, int y, Image img, Board b) {
+        super(x, y, img, b);
         speed = 1;
     }
 
@@ -41,9 +33,9 @@ public class Bomber extends Character {
         if (!alive) {
             return;
         }
-        if (keyCodeList.size() >= 1) {
+        if (board.keyCodeList.size() >= 1) {
             resetVelocity();
-            KeyCode keyCode = keyCodeList.lastElement();
+            KeyCode keyCode = board.keyCodeList.lastElement();
             if (keyCode == KeyCode.LEFT) {
                 direction = LEFT;
                 velocityX = -speed;
@@ -67,7 +59,7 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-        alive = true;
+        alive = false;
     }
 
     @Override
@@ -77,13 +69,13 @@ public class Bomber extends Character {
         }
         if (timeAfter <= 0) {
             remove = true;
-            state = GAME_OVER;
-            result = LOST;
+            board.setState(GAME_OVER);
+            board.setResult(LOST);
         }
     }
 
     @Override
-    public boolean canMove() {
+    protected boolean canMove() {
         int column = getXCanvas();
         int row = getYCanvas();
         if (row <= 0) {
@@ -95,7 +87,7 @@ public class Bomber extends Character {
         Entity object = null;
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = column - 1; j <= column + 1; j++) {
-                object = mapObjects.get(i).get(j);
+                object = board.mapObjects.get(i).get(j);
                 if (object instanceof Brick || object instanceof Wall) {
                     if (this.intersect(object)) {
                         slide(object);
@@ -104,7 +96,7 @@ public class Bomber extends Character {
                 }
             }
         }
-        for (Bomb bomb : bombs) {
+        for (Bomb bomb : board.bombs) {
             if (this.intersect(bomb) && bomb.isHarmful()) {
                 slide(object);
                 return false;
@@ -163,24 +155,24 @@ public class Bomber extends Character {
         }
     }
 
-    public void stay() {
+    private void stay() {
         moving = false;
     }
 
-    public void placeBomb() {
-        if (keyCodeList.size() > 0 && keyCodeList.lastElement() == KeyCode.SPACE) {
-            if (keyCodeList.size() >= 1 && bombs.size() < bombLeft
-                && !getBombAt(getXCanvas(), getYCanvas())) {
+    private void placeBomb() {
+        if (board.keyCodeList.size() > 0 && board.keyCodeList.lastElement() == KeyCode.SPACE) {
+            if (board.keyCodeList.size() >= 1 && board.bombs.size() < bombLeft
+                && !board.getBombAt(getXCanvas(), getYCanvas())) {
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(),
-                    this);
-                bombs.add(bomb);
+                    this , board);
+                board.bombs.add(bomb);
             }
-            keyCodeList.pop();
+            board.keyCodeList.pop();
         }
     }
 
-    public void slide(Entity obstacle) {
-        Bomber e = new Bomber(0, 0, Sprite.oneal_right1.getFxImage());
+    private void slide(Entity obstacle) {
+        Bomber e = new Bomber(0, 0, Sprite.oneal_right1.getFxImage(), board);
         e.setX(this.x);
         e.setY(this.y);
         switch (direction) {
@@ -216,8 +208,8 @@ public class Bomber extends Character {
         }
     }
 
-    public void powerUp() {
-        for (Entity entity : ground) {
+    private void powerUp() {
+        for (Entity entity : board.ground) {
             if (entity instanceof Buff || entity instanceof Portal) {
                 if (this.intersect(entity)) {
                     if (entity instanceof BombBuff) {
@@ -229,9 +221,9 @@ public class Bomber extends Character {
                     } else if (entity instanceof RemoteBomb) {
                         remote = true;
                     } else if (entity instanceof Portal) {
-                        if (characters.size() == 1) {
-                            state = GAME_OVER;
-                            result = WON;
+                        if (board.characters.size() == 1) {
+                            board.setState(GAME_OVER);
+                            board.setResult(WON);
                             return;
                         }
                         moveBack();
@@ -242,8 +234,6 @@ public class Bomber extends Character {
             }
         }
     }
-
-    public boolean isRemote() { return remote; }
 
     public int getFlameLength() {
         return flameLength;

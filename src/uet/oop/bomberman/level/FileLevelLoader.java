@@ -1,8 +1,5 @@
 package uet.oop.bomberman.level;
 
-import static uet.oop.bomberman.BombermanGame.characters;
-import static uet.oop.bomberman.BombermanGame.ground;
-import static uet.oop.bomberman.BombermanGame.mapObjects;
 import static uet.oop.bomberman.graphics.Sprite.DEFAULT_SIZE;
 import static uet.oop.bomberman.graphics.Sprite.brick;
 import static uet.oop.bomberman.graphics.Sprite.grass;
@@ -13,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Kondoria;
@@ -24,21 +23,21 @@ import uet.oop.bomberman.graphics.SpriteSheet;
 
 
 public class FileLevelLoader {
-
+    private Board board;
     private char[][] map;
     private int height;
     private int width;
     public static int level = 1;
 
-    public FileLevelLoader() {
-
+    public FileLevelLoader(Board b) {
+        board = b;
     }
 
-    public int getHeight() {
+    private int getHeight() {
         return height;
     }
 
-    public int getWidth() {
+    private int getWidth() {
         return width;
     }
 
@@ -56,7 +55,6 @@ public class FileLevelLoader {
             e.printStackTrace();
         }
         String[] arrays = list.get(0).trim().split(" ");
-        _level = Integer.parseInt(arrays[0]);
         height = Integer.parseInt(arrays[1]);
         width = Integer.parseInt(arrays[2]);
         map = new char[height][width];
@@ -69,13 +67,12 @@ public class FileLevelLoader {
 
     public void createEntities() {
         for (int y = 0; y < getHeight(); y++) {
-            mapObjects.add(new ArrayList<Entity>());
+            board.mapObjects.add(new ArrayList<>());
             for (int x = 0; x < getWidth(); x++) {
                 Entity object;
-                int pos = x + y * getWidth();
                 char c = map[y][x];
                 Grass grass = new Grass(x, y, Sprite.grass.getFxImage());
-                ground.add(grass);
+                board.ground.add(grass);
                 switch (c) {
                     // Thêm grass
                     case ' ':
@@ -88,26 +85,26 @@ public class FileLevelLoader {
                     // Thêm Portal
                     case 'x':
                         object = new Brick(x, y, Sprite.brick.getFxImage());
-                        ground.add(new Portal(x, y, Sprite.portal.getFxImage()));
+                        board.ground.add(new Portal(x, y, Sprite.portal.getFxImage()));
                         break;
                     // Thêm brick
                     case '*':
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     case 'b':
-                        ground.add(new BombBuff(x, y, Sprite.powerup_bombs.getFxImage()));
+                        board.ground.add(new BombBuff(x, y, Sprite.powerup_bombs.getFxImage(), board));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     case 'f':
-                        ground.add(new FlameBuff(x, y, Sprite.powerup_flames.getFxImage()));
+                        board.ground.add(new FlameBuff(x, y, Sprite.powerup_flames.getFxImage(), board));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     case 's':
-                        ground.add(new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage()));
+                        board.ground.add(new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage(), board));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     case 'r':
-                        ground.add(new RemoteBomb(x, y, Sprite.powerup_remotebomb.getFxImage()));
+                        board.ground.add(new RemoteBomb(x, y, Sprite.powerup_remotebomb.getFxImage(), board));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     default: {
@@ -115,7 +112,7 @@ public class FileLevelLoader {
                         break;
                     }
                 }
-                mapObjects.get(y).add(object);
+                board.mapObjects.get(y).add(object);
             }
         }
     }
@@ -127,16 +124,16 @@ public class FileLevelLoader {
                 switch (c) {
                     // Thêm grass
                     case '1':
-                        characters.add(new Balloom(x, y, Sprite.balloom_left1.getFxImage()));
+                        board.characters.add(new Balloom(x, y, Sprite.balloom_left1.getFxImage(), board));
                         break;
                     case '2':
-                        characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage()));
+                        board.characters.add(new Oneal(x, y, Sprite.oneal_left1.getFxImage(), board));
                         break;
                     case '3':
-                        characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage()));
+                        board.characters.add(new Kondoria(x, y, Sprite.kondoria_left1.getFxImage(), board));
                         break;
                     case '4':
-                        characters.add(new Pontan(x, y, Sprite.pontan_left1.getFxImage()));
+                        board.characters.add(new Pontan(x, y, Sprite.pontan_left1.getFxImage(), board));
                     default:
                         break;
                     }

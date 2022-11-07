@@ -1,20 +1,18 @@
 package uet.oop.bomberman.entities.character.enemy;
 
-import static uet.oop.bomberman.BombermanGame.characters;
-
-
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.AI.AIHigh;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Oneal extends Enemy {
-    public Oneal(int x, int y, Image img) {
-        super(x, y, img);
+    public Oneal(int x, int y, Image img, Board b) {
+        super(x, y, img, b);
         this.points = 200;
         this.speed = 0.5;
         this.deadImage = Sprite.oneal_dead.getFxImage();
-        ai = new AIHigh((Bomber) characters.get(0), this);
+        ai = new AIHigh((Bomber) board.characters.get(0), this, board);
         this.direction = 1;
     }
 

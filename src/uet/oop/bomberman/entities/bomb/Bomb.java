@@ -1,37 +1,30 @@
 package uet.oop.bomberman.entities.bomb;
 
-import static uet.oop.bomberman.BombermanGame.mapObjects;
-
-import java.util.ArrayList;
-
-import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.AnimatedEntity;
-import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
-import uet.oop.bomberman.entities.tile.Brick;
-import uet.oop.bomberman.entities.tile.Grass;
-import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.sound.mediaPlayer;
 import static uet.oop.bomberman.entities.character.Bomber.remote;
-import static uet.oop.bomberman.BombermanGame.keyCodeList;
 
 public class Bomb extends AnimatedEntity {
 
+    protected Board board;
+
     protected Bomber bomber;
-    protected int timeLeft = 240;
+    private int timeLeft = 240;
     private Flame flame = null;
     private boolean harmful = false;
-    mediaPlayer explodeSound = new mediaPlayer("res/sounds/explode.wav");
-    mediaPlayer bombPlant = new mediaPlayer("res/sounds/plantingBomb.wav");
+    private mediaPlayer explodeSound = new mediaPlayer("res/sounds/explode.wav");
+    private mediaPlayer bombPlant = new mediaPlayer("res/sounds/plantingBomb.wav");
 
-    public Bomb(double xUnit, double yUnit, Image img, Bomber bomber) {
+    public Bomb(double xUnit, double yUnit, Image img, Bomber bomber, Board b) {
         super(xUnit, yUnit, img);
         this.bomber = bomber;
+        board = b;
     }
 
 
@@ -54,26 +47,26 @@ public class Bomb extends AnimatedEntity {
         this.bomber = bomber;
     }
 
-    public void countDown() {
+    private void countDown() {
         bombPlant.play();
-        if (remote == false){
+        if (!remote){
             timeLeft--;
             explode();
         }
         else {
-            if(keyCodeList.size() > 0 && keyCodeList.lastElement() == KeyCode.J){
+            timeLeft--;
+            if(board.keyCodeList.size() > 0 && board.keyCodeList.lastElement() == KeyCode.X){
                 timeLeft = 1;
-                explode();
-                remote = false;
-                keyCodeList.pop();
+                board.keyCodeList.pop();
             }
+            explode();
         }
 
     }
 
-    public void explode() {
+    private void explode() {
         if (timeLeft == 0) {
-            flame = new Flame(getXCanvas(), getYCanvas(), null, bomber);
+            flame = new Flame(getXCanvas(), getYCanvas(), null, bomber, board);
             img = Sprite.bomb_exploded.getFxImage();
             explodeSound.play();
         } else if (timeLeft == -24) {
@@ -86,7 +79,7 @@ public class Bomb extends AnimatedEntity {
         }
     }
 
-    public void chooseSprite() {
+    void chooseSprite() {
         if (timeLeft > 0) {
             img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, animate, 60)
                 .getFxImage();
@@ -112,27 +105,11 @@ public class Bomb extends AnimatedEntity {
         return harmful;
     }
 
-    public void printMap() {
-        for (ArrayList<Entity> arrayList : mapObjects) {
-            for (Entity entity : arrayList) {
-                if (entity instanceof Brick) {
-                    System.out.print('x');
-                } else if (entity instanceof Wall) {
-                    System.out.print('#');
-                } else if (entity instanceof Grass) {
-                    System.out.print(' ');
-                }
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-    public void setTimeLeft(int timeLeft) {
+    void setTimeLeft(int timeLeft) {
         this.timeLeft = timeLeft;
     }
 
-    public int getTimeLeft() {
+    int getTimeLeft() {
         return timeLeft;
     }
 }

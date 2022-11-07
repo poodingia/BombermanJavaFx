@@ -18,22 +18,17 @@ public class Node {
     }
 
     // Method Getter h
-    public int getH() {
+    private int getH() {
         return h;
     }
 
-    // Method Setter h
-    public void setH(int h) {
-        this.h = h;
-    }
-
     // Method Getter g
-    public int getG() {
+    private int getG() {
         return g;
     }
 
     // Method Setter g
-    public void setG(int g) {
+    private void setG(int g) {
         this.g = g;
     }
 
@@ -43,7 +38,7 @@ public class Node {
     }
 
     // Method Setter f
-    public void setF(int f) {
+    private void setF(int f) {
         this.f = f;
     }
 
@@ -52,19 +47,9 @@ public class Node {
         return row;
     }
 
-    // Method Setter row
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     // Method Getter column
     public int getCol() {
         return col;
-    }
-
-    // Method Setter column
-    public void setCol(int col) {
-        this.col = col;
     }
 
     // Method Getter return boolean check if "is block?"
@@ -83,7 +68,7 @@ public class Node {
     }
 
     // Method Setter to set parent object
-    public void setParent(Node parent) {
+    private void setParent(Node parent) {
         this.parent = parent;
     }
 
@@ -108,7 +93,7 @@ public class Node {
         return false;
     }
 
-    public void calculateFinalCost() {
+    private void calculateFinalCost() {
         int final_cost = getG() + getH();
         setF(final_cost);
     }
@@ -116,8 +101,11 @@ public class Node {
     // Override "equals" method with obj parameter in Object class to determine the feature in game.
     @Override
     public boolean equals(Object obj) {
-        Node other = (Node) obj;
-        return this.getRow() == other.getRow() && this.getCol() == other.getCol();
+        if (obj instanceof Node) {
+            Node other = (Node) obj;
+            return this.getRow() == other.getRow() && this.getCol() == other.getCol();
+        }
+        return false;
     }
 
     // Override output string statement

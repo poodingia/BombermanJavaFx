@@ -1,30 +1,27 @@
 package uet.oop.bomberman.entities.character.enemy;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
-import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.AI.AIHigher;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.Random;
 
-import static uet.oop.bomberman.BombermanGame.*;
-
 //Spawn when timer runs out
 public class Pontan extends Enemy {
-    Random rand = new Random();
-    public Pontan (int x, int y, Image img) {
-        super(x, y, img);
+    public Pontan (int x, int y, Image img, Board b) {
+        super(x, y, img, b);
         this.points = 10000;
         this.speed = 2;
+        Random rand = new Random();
         if (rand.nextInt(2) == 1) {
             this.deadImage = Sprite.pontan_dead_1.getFxImage();
         } else  this.deadImage = Sprite.pontan_dead_2.getFxImage();
         
-        ai = new AIHigher((Bomber)characters.get(0), this);
+        ai = new AIHigher((Bomber) board.characters.get(0), this, board);
         direction = ai.calculateDirection();
     }
 

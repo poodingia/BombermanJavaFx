@@ -14,4 +14,6 @@ public interface Constant {
 
     int FREEZE = 22;
     int MOVE = FREEZE - 1;
+
+    int TIME = 300;
 }
