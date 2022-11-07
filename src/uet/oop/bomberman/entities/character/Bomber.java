@@ -17,6 +17,7 @@ import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Buff;
 import uet.oop.bomberman.entities.tile.FlameBuff;
+import uet.oop.bomberman.entities.tile.RemoteBomb;
 import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.tile.SpeedBuff;
 import uet.oop.bomberman.entities.tile.Wall;
@@ -28,7 +29,7 @@ public class Bomber extends Character {
     private int timeAfter = 100;
 
     private int flameLength = 2;
-
+    public static boolean remote = false;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
@@ -66,7 +67,7 @@ public class Bomber extends Character {
 
     @Override
     public void kill() {
-        alive = false;
+        alive = true;
     }
 
     @Override
@@ -225,6 +226,8 @@ public class Bomber extends Character {
                         flameLength++;
                     } else if (entity instanceof SpeedBuff) {
                         speed += 0.25;
+                    } else if (entity instanceof RemoteBomb) {
+                        remote = true;
                     } else if (entity instanceof Portal) {
                         if (characters.size() == 1) {
                             state = GAME_OVER;
@@ -239,6 +242,8 @@ public class Bomber extends Character {
             }
         }
     }
+
+    public boolean isRemote() { return remote; }
 
     public int getFlameLength() {
         return flameLength;

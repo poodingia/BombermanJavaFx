@@ -58,12 +58,12 @@ public class BombermanGame extends Application implements Constant, Style {
     mediaPlayer winMusic = new mediaPlayer("res/music/win.mp3");
     mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
-    private int level = 3;
+    private int level = 1;
     private Text Stat = new Text(String.format("Level %d", level));
     private GraphicsContext gc;
     private Canvas canvas;
     private FileLevelLoader levelLoader = new FileLevelLoader();
-    private Scene GameScene;
+    public static Scene GameScene;
     private Scene pausedMenuScene;
     private Scene Victory;
     private Scene Defeated;
@@ -96,7 +96,7 @@ public class BombermanGame extends Application implements Constant, Style {
         createMap();
 
         GameScene.setOnKeyPressed(event -> {
-            if (event.getCode().isArrowKey() || event.getCode() == KeyCode.SPACE) {
+            if (event.getCode().isArrowKey() || event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.J) {
                 keyCodeList.add(event.getCode());
             }
         });

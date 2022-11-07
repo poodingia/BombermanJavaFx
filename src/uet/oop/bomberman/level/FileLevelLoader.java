@@ -18,13 +18,7 @@ import uet.oop.bomberman.entities.character.enemy.Balloom;
 import uet.oop.bomberman.entities.character.enemy.Kondoria;
 import uet.oop.bomberman.entities.character.enemy.Oneal;
 import uet.oop.bomberman.entities.character.enemy.Pontan;
-import uet.oop.bomberman.entities.tile.BombBuff;
-import uet.oop.bomberman.entities.tile.Brick;
-import uet.oop.bomberman.entities.tile.FlameBuff;
-import uet.oop.bomberman.entities.tile.Grass;
-import uet.oop.bomberman.entities.tile.Portal;
-import uet.oop.bomberman.entities.tile.SpeedBuff;
-import uet.oop.bomberman.entities.tile.Wall;
+import uet.oop.bomberman.entities.tile.*;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.graphics.SpriteSheet;
 
@@ -110,6 +104,10 @@ public class FileLevelLoader {
                         break;
                     case 's':
                         ground.add(new SpeedBuff(x, y, Sprite.powerup_speed.getFxImage()));
+                        object = new Brick(x, y, Sprite.brick.getFxImage());
+                        break;
+                    case 'r':
+                        ground.add(new RemoteBomb(x, y, Sprite.powerup_remotebomb.getFxImage()));
                         object = new Brick(x, y, Sprite.brick.getFxImage());
                         break;
                     default: {

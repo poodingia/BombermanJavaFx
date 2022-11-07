@@ -3,8 +3,12 @@ package uet.oop.bomberman.entities.bomb;
 import static uet.oop.bomberman.BombermanGame.mapObjects;
 
 import java.util.ArrayList;
+
+import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
@@ -13,6 +17,8 @@ import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.sound.mediaPlayer;
+import static uet.oop.bomberman.entities.character.Bomber.remote;
+import static uet.oop.bomberman.BombermanGame.keyCodeList;
 
 public class Bomb extends AnimatedEntity {
 
@@ -50,8 +56,19 @@ public class Bomb extends AnimatedEntity {
 
     public void countDown() {
         bombPlant.play();
-        timeLeft--;
-        explode();
+        if (remote == false){
+            timeLeft--;
+            explode();
+        }
+        else {
+            if(keyCodeList.size() > 0 && keyCodeList.lastElement() == KeyCode.J){
+                timeLeft = 1;
+                explode();
+                remote = false;
+                keyCodeList.pop();
+            }
+        }
+
     }
 
     public void explode() {

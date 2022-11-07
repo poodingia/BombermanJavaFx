@@ -26,8 +26,8 @@ public abstract class Character extends AnimatedEntity {
     protected abstract boolean canMove();
 
     public void move() {
-        this.x += velocityX;
-        this.y += velocityY;
+        this.x += velocityX*10;
+        this.y += velocityY*10;
     }
 
     public void resetVelocity() {
