@@ -9,19 +9,18 @@ import uet.oop.bomberman.entities.tile.BombBuff;
 import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Buff;
 import uet.oop.bomberman.entities.tile.FlameBuff;
-import uet.oop.bomberman.entities.tile.RemoteBomb;
 import uet.oop.bomberman.entities.tile.Portal;
+import uet.oop.bomberman.entities.tile.RemoteBomb;
 import uet.oop.bomberman.entities.tile.SpeedBuff;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Character {
 
+    public static boolean remote = false;
     private int bombLeft = 1;
     private int timeAfter = 100;
-
     private int flameLength = 2;
-    public static boolean remote = false;
 
     public Bomber(int x, int y, Image img, Board b) {
         super(x, y, img, b);
@@ -164,7 +163,7 @@ public class Bomber extends Character {
             if (board.keyCodeList.size() >= 1 && board.bombs.size() < bombLeft
                 && !board.getBombAt(getXCanvas(), getYCanvas())) {
                 Bomb bomb = new Bomb(this.getXCanvas(), this.getYCanvas(), Sprite.bomb.getFxImage(),
-                    this , board);
+                    this, board);
                 board.bombs.add(bomb);
             }
             board.keyCodeList.pop();

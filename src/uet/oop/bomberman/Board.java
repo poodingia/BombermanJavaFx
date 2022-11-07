@@ -23,7 +23,7 @@ public class Board implements Constant {
     private int state = 0;
     private int score = 0;
     private int timer = TIME * 120;
-    private int level = 2;
+    private int level = 1;
 
     public int getLevel() {
         return level;

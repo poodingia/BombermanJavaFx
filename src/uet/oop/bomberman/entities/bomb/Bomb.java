@@ -58,6 +58,7 @@ public class Bomb extends AnimatedEntity {
             if(board.keyCodeList.size() > 0 && board.keyCodeList.lastElement() == KeyCode.X){
                 timeLeft = 1;
                 board.keyCodeList.pop();
+                remote = false;
             }
             explode();
         }
