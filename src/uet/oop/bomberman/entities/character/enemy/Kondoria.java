@@ -10,6 +10,7 @@ import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.AI.AIHigher;
+import uet.oop.bomberman.entities.tile.Brick;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -40,36 +41,11 @@ public class Kondoria extends Enemy {
                 break;
         }
     }
-
     @Override
-    protected boolean canMove() {
-        int column = this.getXCanvas();
-        int row = this.getYCanvas();
-
-        Entity object = null;
-        for (int i = row - 1; i <= row + 1; i++) {
-            for (int j = column - 1; j <= column + 1; j++) {
-                object = mapObjects.get(i).get(j);
-                if (object instanceof Wall) {
-                    if (this.intersect(object)) {
-                        return false;
-                    }
-                }
-            }
+    public int collide(Entity entity) {
+        if(entity instanceof Wall) {
+            return FREEZE;
         }
-
-        for (Bomb bomb : bombs) {
-            if (this.intersect(bomb)) {
-                return false;
-            }
-        }
-
-        for (Character character : characters) {
-            if (this.intersect(character) && character instanceof Enemy && !this.equals(
-                character)) {
-                return false;
-            }
-        }
-        return true;
+        return MOVE;
     }
 }
