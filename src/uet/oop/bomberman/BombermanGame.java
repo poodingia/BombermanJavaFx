@@ -4,7 +4,6 @@ import static uet.oop.bomberman.graphics.ButtonUtil.setUpButton;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -24,6 +23,7 @@ import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.entities.character.enemy.Pontan;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.graphics.Sprite;
@@ -32,7 +32,7 @@ import uet.oop.bomberman.sound.mediaPlayer;
 import uet.oop.bomberman.util.Constant;
 import uet.oop.bomberman.util.Style;
 
-class BombermanGame extends Application implements Constant, Style {
+public class BombermanGame extends Application implements Constant, Style {
 
     private final static Board board = new Board();
     private final VBox root = new VBox();
@@ -47,11 +47,11 @@ class BombermanGame extends Application implements Constant, Style {
     private final mediaPlayer loseMusic = new mediaPlayer("res/music/lose.mp3");
     private final mediaPlayer clicking = new mediaPlayer("res/sounds/click.mp3");
     private final Text Stat = new Text(String.format("Level %d", board.getLevel())
-            + String.format("\t\t\t\t\t\t\tTime: %d", board.getTimer() / 120)
-            + String.format("\t\t\t\t\t\t\tScore: %d", board.getScore()));
+        + String.format("\t\t\t\t\t\t\tTime: %d", board.getTimer() / 120)
+        + String.format("\t\t\t\t\t\t\tScore: %d", board.getScore()));
+    private final FileLevelLoader levelLoader = new FileLevelLoader(board);
     private GraphicsContext gc;
     private Canvas canvas;
-    private final FileLevelLoader levelLoader = new FileLevelLoader(board);
     private Scene pausedMenuScene;
     private Scene Victory;
     private Scene Defeated;
@@ -75,11 +75,13 @@ class BombermanGame extends Application implements Constant, Style {
         createMap();
 
         board.GameScene.setOnKeyPressed(event -> {
-            if (event.getCode().isArrowKey() || event.getCode() == KeyCode.SPACE || event.getCode() == KeyCode.J) {
+            if (event.getCode().isArrowKey() || event.getCode() == KeyCode.SPACE
+                || event.getCode() == KeyCode.J) {
                 board.keyCodeList.add(event.getCode());
             }
         });
-        board.GameScene.setOnKeyReleased(event -> board.keyCodeList.removeIf(keyCode -> keyCode == event.getCode()));
+        board.GameScene.setOnKeyReleased(
+            event -> board.keyCodeList.removeIf(keyCode -> keyCode == event.getCode()));
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -129,7 +131,8 @@ class BombermanGame extends Application implements Constant, Style {
             "-fx-font: 80px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #008cff 0%, #00e1ff 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
         Font font1 = Font.font("Algerian", FontWeight.BOLD, 30);
         title.setFont(font1);
-        Stat.setStyle("-fx-font: 15px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #e7e0b6 0%, #f1de44 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
+        Stat.setStyle(
+            "-fx-font: 15px Algerian; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #e7e0b6 0%, #f1de44 50%); -fx-stroke: #1a7422; -fx-stroke-width: 1");
         setUpButton(start);
         setUpButton(exit);
 
@@ -319,11 +322,17 @@ class BombermanGame extends Application implements Constant, Style {
             board.setTimer(board.getTimer() - 1);
             if (board.getTimer() == 0) {
                 if (board.getPortal() != null) {
-                    board.characters.add(new Pontan(board.getPortal().getXCanvas(), board.getPortal().getYCanvas(), Sprite.pontan_left1.getFxImage(), board));
-                    board.characters.add(new Pontan(board.getPortal().getXCanvas(), board.getPortal().getYCanvas(), Sprite.pontan_right1.getFxImage(), board));
+                    board.characters.add(
+                        new Pontan(board.getPortal().getXCanvas(), board.getPortal().getYCanvas(),
+                            Sprite.pontan_left1.getFxImage(), board));
+                    board.characters.add(
+                        new Pontan(board.getPortal().getXCanvas(), board.getPortal().getYCanvas(),
+                            Sprite.pontan_right1.getFxImage(), board));
                 }
             }
-        } else board.setTimer(-1);
+        } else {
+            board.setTimer(-1);
+        }
     }
 
     private void render() {
@@ -337,13 +346,12 @@ class BombermanGame extends Application implements Constant, Style {
         }));
         board.characters.forEach(g -> g.render(gc));
         Stat.setText(String.format("Level %d ", board.getLevel())
-                + String.format("\t\t\t\t\t\t\tTime: %d", board.getTimer() / 120)
-                + String.format("\t\t\t\t\t\t\tScore: %d", board.getScore()));
+            + String.format("\t\t\t\t\t\t\tTime: %d", board.getTimer() / 120)
+            + String.format("\t\t\t\t\t\t\tScore: %d", board.getScore()));
     }
 
     private void reset(Stage stage) {
-        Bomber tmp = (Bomber) board.characters.get(0);
-        board.characters.clear();
+        board.characters.removeIf(c -> c instanceof Enemy);
         board.ground.clear();
         board.mapObjects.forEach(ArrayList::clear);
         board.keyCodeList.clear();
@@ -362,12 +370,14 @@ class BombermanGame extends Application implements Constant, Style {
             }
 
         } else if (board.getResult() == LOST) {
+            board.characters.clear();
             board.setLevel(1);
             loseTrans(stage);
         }
-        tmp.setXCanvas(1);
-        tmp.setYCanvas(1);
-        board.characters.add(tmp);
+        if (board.characters.size() > 0) {
+            board.characters.get(0).setX(32);
+            board.characters.get(0).setY(32);
+        }
         createMap();
     }
 

@@ -217,7 +217,7 @@ public class Bomber extends Character {
                     } else if (entity instanceof FlameBuff) {
                         flameLength++;
                     } else if (entity instanceof SpeedBuff) {
-                        speed += 0.25;
+                        speed += 0.5;
                     } else if (entity instanceof RemoteBomb) {
                         remote = true;
                     } else if (entity instanceof Portal) {
@@ -240,7 +240,7 @@ public class Bomber extends Character {
     }
 
     public boolean intersect(Entity object) {
-        return this.x < object.getX() + 32 && this.x + 32 - 8 > object.getX()
-            && this.y < object.getY() + 32 && this.y + 32 > object.getY();
+        return this.x < object.getX() + 31 && this.x + 31 - 8 > object.getX()
+            && this.y < object.getY() + 31 && this.y + 31 > object.getY();
     }
 }

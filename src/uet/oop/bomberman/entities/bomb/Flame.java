@@ -46,7 +46,7 @@ public class Flame extends Bomb {
     public void kill() {
         for (Character character : board.characters) {
             for (FlameSegment flameSegment : flameSegmentList) {
-                if (character.intersect(flameSegment) || character.intersect(this)) {
+                if (flameSegment.intersect(character) || character.intersect(this)) {
                     character.kill();
                 }
             }
