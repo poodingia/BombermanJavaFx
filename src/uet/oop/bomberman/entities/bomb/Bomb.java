@@ -7,8 +7,7 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.sound.mediaPlayer;
-import static uet.oop.bomberman.entities.character.Bomber.remote;
+import uet.oop.bomberman.sound.mediaPlayer;;
 
 public class Bomb extends AnimatedEntity {
 
@@ -49,7 +48,7 @@ public class Bomb extends AnimatedEntity {
 
     private void countDown() {
         bombPlant.play();
-        if (!remote){
+        if (!bomber.isRemote()){
             timeLeft--;
             explode();
         }
@@ -58,7 +57,6 @@ public class Bomb extends AnimatedEntity {
             if(board.keyCodeList.size() > 0 && board.keyCodeList.lastElement() == KeyCode.X){
                 timeLeft = 1;
                 board.keyCodeList.pop();
-                remote = false;
             }
             explode();
         }

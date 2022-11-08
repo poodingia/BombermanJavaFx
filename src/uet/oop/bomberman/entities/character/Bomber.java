@@ -17,14 +17,21 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Character {
 
-    public static boolean remote = false;
+    private boolean remote = false;
     private int bombLeft = 1;
     private int timeAfter = 100;
     private int flameLength = 2;
-
     public Bomber(int x, int y, Image img, Board b) {
         super(x, y, img, b);
         speed = 1;
+    }
+
+    public boolean isRemote() {
+        return remote;
+    }
+
+    public void setRemote(boolean remote) {
+        this.remote = remote;
     }
 
     @Override

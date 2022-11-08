@@ -1,7 +1,6 @@
 package uet.oop.bomberman;
 
 import static uet.oop.bomberman.graphics.ButtonUtil.setUpButton;
-import static uet.oop.bomberman.entities.character.Bomber.remote;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -361,7 +360,6 @@ public class BombermanGame extends Application implements Constant, Style {
         board.setTimer(TIME * 120);
         board.setScore(0);
         levelLoader.updateSprite(board.getLevel());
-        remote = false;
         if (board.getResult() == WON) {
             board.setLevel(board.getLevel() + 1);
             if (board.getLevel() <= 3) {
